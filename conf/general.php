@@ -1,7 +1,7 @@
 <?php
 
 // System DIR_NAME
-define("SYS_DIR_NAME","visualization_paper");
+define("SYS_DIR_NAME","paper_tool");
 
 // System PATH
 $_path = strstr(getcwd(),SYS_DIR_NAME,true);
@@ -26,7 +26,7 @@ define("DATABASE_DRIVER","postgres");
 define("DATABASE_SERVER","localhost");
 define("DATABASE_USER","tool");
 define("DATABASE_PASSWORD","tool");
-define("DATABASE_NAME","vispaper");
+define("DATABASE_NAME","paper_tool");
 
 // Misc PATHs
 
