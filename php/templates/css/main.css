@@ -1,0 +1,53 @@
+#logo_topo {
+    display: table;
+    float: left;
+    height: 5%;
+	margin: 0;
+	width: 220px;
+}
+
+.navbar-inner-menu-sup {
+	display: table;
+    line-height: 0;
+	clear: both;
+	width: 100%;
+	background-color: black;	
+}
+
+#main {
+	background-color: #818181;
+    height: 95%;
+    position: absolute;
+    width: 100%;	
+}
+
+#content-iframe {
+	background-color: #FFFFFF;
+    float: left;
+    height: 100%;
+    width: 100%;
+}
+
+/*
+#menu-right {
+	background-color: #FFFFFF;
+    float: left;
+    height: auto !important;
+    min-height: 87%;
+    width: 17%;
+}
+*/
+
+.navbar-inverse .nav > li > a {
+	color: #fff;
+}
+
+.navbar-inverse .nav > li > a:hover {
+	color: #678CFF;
+}
+
+#iframe-style {
+	border: medium none;
+    height: 100%;
+    width: 100%;	
+}

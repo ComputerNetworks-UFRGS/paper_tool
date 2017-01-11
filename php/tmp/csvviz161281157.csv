@@ -1,0 +1,25 @@
+Dataset types|----
+Tables|216
+Multidimensional tables|0
+Link/Node|87
+Trees|12
+Fields|0
+Geometry|0
+Static file|178
+Dynamic stream|86
+Visualization Technique|----
+Standard 2D/3D displays|254
+Geometrically transformed displays|36
+Icon-based displays|137
+Dense pixel displays|62
+Stacked displays|21
+Tasks|----
+Overview|155
+Zoom/Interactive Zooming|105
+Filter/Interactive Filtering|116
+Details-on-demand|32
+Relate|14
+History|1
+Extract|1
+Linking and Brushing|18
+Moving/Rotate|33
