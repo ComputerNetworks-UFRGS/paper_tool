@@ -16,7 +16,7 @@
 	<link href="{$CSS_LIBS_PATH}jstree-style.css" media="screen" rel="stylesheet" type="text/css" />
 	<link href="{$CSS_LIBS_PATH}alertify.core.css" media="screen" rel="stylesheet" type="text/css" />       
     <link href="{$CSS_LIBS_PATH}alertify.default.css" media="screen" rel="stylesheet" type="text/css" />
-	
+
 	<!--[if lt IE 9]>
 	<script src="../../javascripts/vendor/html5shiv.js" type="text/javascript"></script>
 	<script src="../../javascripts/vendor/excanvas.js" type="text/javascript"></script>
@@ -24,23 +24,12 @@
 	<script src="{$JS_LIBS_PATH}application.js" type="text/javascript"></script> 
 	<script src="{$JS_LIBS_PATH}jstree.js" type="text/javascript"></script> 
 	<script src="{$JS_LIBS_PATH}alertify/alertify.min.js" type="text/javascript"></script>
-	<script type="text/javascript">
-		{literal}
-		$( document ).ready(function() {
-			$('#container').jstree({
-			    'core' : {
-			        'data' : [
-			            { "text" : "Root node", "children" : [
-			                { "text" : "Child node 1" },
-			                { "text" : "Child node 2" }
-			            ]
-			            },
-			        ]
-			    }
-			});
-		});
-		{/literal}
-	</script>
+	<script src="{$JS_PATH}taxonomies.js" type="text/javascript"></script>
+	<style type="text/css">
+		body {
+			background: #F5F5F5;
+		}
+	</style>
 </head>
 
 <body >
@@ -56,54 +45,23 @@
 	</h5>
   	</div>
 </div>
-	<div id="container"></div>
-	<!-- 
-  	<div class="modal-body">
-    	<form name="form" class="form-horizontal fill-up separate-sections" method="post" enctype="multipart/form-data" action="papers-con.php">
-			<input type="hidden" value="1" id="operation" name="operation"/>
-      		<div>
-        		<label>Paper title</label>
-        		<input type="text" name="title" placeholder="title" required/>
-      		</div>
 
-			<div>
-            	<label>Paper year</label>
-               	<select class="chzn-select" name="year" style="width:40%">
-					{html_options options=$years}	
-                </select>
-			</div>
-			
-			<div>
-                <label>Citations</label>
-                <input type="text" pattern="\d*" name="citations" placeholder="citations (just numbers)" maxlength="5"/>
-            </div>
-
-			<div>
-                <label>Vehicle</label>
-                <input type="text" name="vehicle" placeholder="vehicle" required/>
-            </div>
-
-			<div>
-                <label>Vehicle site</label>
-                <input type="url" name="site" placeholder="site" required/>
-            </div>
-		
-			<div>
-				<label>Comments</label>
-        		<textarea rows="4" placeholder="enter a brief paper explanation" name="comments"></textarea>
-      		</div>
-			
-            <div>
-                <label>Paper upload</label>
-				<div class="uploader">
-            	<input name="paper" type="file" required><span style="-moz-user-select: none;" class="filename">No file selected</span><span style="-moz-user-select: none;" class="action">+</span>
-				</div>
-			</div>
+<div class="container">
+	<div class="row">
+		<button type="button" class="btn btn-success" onclick="demo_create();">Create</button>
+		<button type="button" class="btn btn-warning" onclick="demo_rename();">Rename</button>
+		<button type="button" class="btn btn-danger" onclick="demo_delete();">Delete</button>
 	</div>
-	<div class="modal-footer">
-    	<input type="submit" id="add-paper" class="btn btn-blue" value="Add paper"/>
-  	</div>
-	</form>
-	-->
+	<div class="row">
+		<div class="col-3">
+			<div id="jstree_demo" class="demo" style="margin-top:1em; min-height:200px;"></div>
+		</div>
+	</div>
+</div>
+
+<!-- <div class="modal-footer">
+	<input type="submit" id="add-paper" class="btn btn-blue" value="Add paper"/>
+</div> -->
+	
 </body>
 </html>

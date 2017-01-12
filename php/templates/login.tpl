@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=0">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,800">
 
-
   <meta charset="utf-8">
 
   <!-- Always force latest IE rendering engine or request Chrome Frame -->
@@ -14,18 +13,6 @@
   <!-- Use title if it's in the page YAML frontmatter -->
   <title>{$SYS_TITLE}</title>
 
-<!--
-  <link href="{$CSS_LIBS_PATH}box.css" media="screen" rel="stylesheet" type="text/css" />
-	<link href="{$CSS_LIBS_PATH}bootstrap/bootstrap.css" media="screen" rel="stylesheet" type="text/css" />
-	<link href="{$CSS_LIBS_PATH}bootstrap/responsive.css" media="screen" rel="stylesheet" type="text/css" />
-	<link href="{$CSS_LIBS_PATH}base.css" media="screen" rel="stylesheet" type="text/css" />
-  <link href="{$CSS_LIBS_PATH}buttons.css" media="screen" rel="stylesheet" type="text/css" />
-	<link href="{$CSS_LIBS_PATH}bootstrap-editable.css" media="screen" rel="stylesheet" type="text/css" />
-	<link href="{$CSS_LIBS_PATH}bootstrap_include.css" media="screen" rel="stylesheet" type="text/css" />
-	<link href="{$CSS_LIBS_PATH}form_elements.css" media="screen" rel="stylesheet" type="text/css" />
-	<link href="{$CSS_LIBS_PATH}font-awesome.css" media="screen" rel="stylesheet" type="text/css" />
-	<link href="{$CSS_LIBS_PATH}sidebar.css" media="screen" rel="stylesheet" type="text/css" />
--->
 	<link href="{$CSS_LIBS_PATH}application.css" media="screen" rel="stylesheet" type="text/css" />
 	<link href="{$CSS_PATH}login.css" media="screen" rel="stylesheet" type="text/css" />
 
@@ -39,9 +26,9 @@
   <!--		<div class="span4 offset4"> -->
 			<div class="padded">
 				<div class="logo">
-					<h1>Visualization and Network Management paper</h1>
+					<h1>Simple Paper Classifier</h1>
 					<p class="lead">
-					Support tool
+					A supporting tool for recording papers and classify them into taxonomies 
 					</p>
     			</div>
 				<div class="login box" style="margin-top: 40px;">
