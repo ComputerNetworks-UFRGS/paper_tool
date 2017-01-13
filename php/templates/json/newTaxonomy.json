@@ -1,6 +1,0 @@
-[
-  { "id" : "topic_L1_1", "text" : "Topic 1", "type" : "root" },
-  { "id" : "topic_L1_2", "text" : "Topic 2", "type" : "root" },
-  { "id" : "topic_L1_3", "text" : "Topic 3", "type" : "root" },
-  { "id" : "topic_L1_4", "text" : "Topic 4", "type" : "root" }
-]
