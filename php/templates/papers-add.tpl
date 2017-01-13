@@ -62,18 +62,18 @@
             </div>
 
 			<div>
-                <label>Vehicle</label>
-                <input type="text" name="vehicle" placeholder="vehicle" required/>
+                <label>Venue</label>
+                <input type="text" name="venue" placeholder="venue" required/>
             </div>
 
 			<div>
-                <label>Vehicle site</label>
+                <label>Venue site</label>
                 <input type="url" name="site" placeholder="site" required/>
             </div>
 		
 			<div>
-				<label>Comments</label>
-        		<textarea rows="4" placeholder="enter a brief paper explanation" name="comments"></textarea>
+				<label>Search Query</label>
+        		<textarea rows="4" placeholder="Type the query that was used to search this paper" name="comments"></textarea>
       		</div>
 			
             <div>

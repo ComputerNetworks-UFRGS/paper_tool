@@ -17,29 +17,13 @@ $smarty->assign('SYS_TITLE',SYS_TITLE);
 
 $smarty->assign('USERNAME',$_SESSION['username']);
 
-$conexao = ADONewConnection(DATABASE_DRIVER);
-//$db->debug = true;
-$conexao->Connect(DATABASE_SERVER, DATABASE_USER, DATABASE_PASSWORD, DATABASE_NAME);
-
-$sSQL = "SELECT * from papers where status = '1';";
-
-$topologies = $conexao->GetArray($sSQL);
-$smarty->assign("topologies_count",count($topologies));
-$smarty->assign("topologies",$topologies);
-
 $years = array();
-for($i = 1980; $i <= 2020; $i++){
+for($i = 1980; $i <= 2050; $i++){
 	$years[$i] = $i;
 }
 
 $smarty->assign('years',$years);
 
-//ivar_dump($topologies);
-
-//$rs = $db->Execute('select * from teste;');
-
-//** un-comment the following line to show the debug console
-//$smarty->debugging = true;
 
 $smarty->display('papers-add.tpl');
 ?>

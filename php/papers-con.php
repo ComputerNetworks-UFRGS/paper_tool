@@ -20,8 +20,8 @@ if($operation == 1){
 
 	$uploadfile = PAPERS_PATH . $file_name;
 	if (move_uploaded_file($_FILES['paper']['tmp_name'], $uploadfile)) {
-		$sSQL = "INSERT INTO papers (id,year,citations,title,vehicle,site,comments,file) values ";
-    	$sSQL.= "($id,".$_REQUEST['year'].",".$_REQUEST['citations'].",'".$_REQUEST['title']."','".$_REQUEST['vehicle']."','".$_REQUEST['site']."','".$_REQUEST['comments']."', '$file_name');";
+		$sSQL = "INSERT INTO papers (id,year,citations,title,venue,site,comments,file) values ";
+    	$sSQL.= "($id,".$_REQUEST['year'].",".$_REQUEST['citations'].",'".$_REQUEST['title']."','".$_REQUEST['venue']."','".$_REQUEST['site']."','".$_REQUEST['comments']."', '$file_name');";
     	
 		$msg = "Success! Paper was recorded.";
 	

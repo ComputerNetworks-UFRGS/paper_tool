@@ -75,6 +75,11 @@
 			</ul>
 			<div class="nav-collapse nav-collapse-top collapse">
 				<ul class="nav pull-right">
+					<li>
+						<a href="taxonomy-add.php" target="iframe-body">
+							<i class="icon-sitemap"></i>Taxonomies
+						</a>
+					</li>
 					<li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-file"></i> Papers <b class="caret"></b></a>
                         <ul class="dropdown-menu">
