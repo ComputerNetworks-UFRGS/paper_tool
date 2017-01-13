@@ -1,5 +1,5 @@
 <?php
-//require_once "session.php";
+require_once "session.php";
 require_once "../conf/general.php";
 require_once INCLUDE_SMARTY;
 require_once INCLUDE_ADODB;

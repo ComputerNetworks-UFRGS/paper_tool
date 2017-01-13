@@ -30,7 +30,7 @@
 			background: #F5F5F5;
 		}
 		#saveTaxonomyBtn {
-			margin-top: 1em;
+			margin-left: 3em;
 		}
 	</style>
 </head>
@@ -58,7 +58,7 @@
 		<br>
 		<button type="button" id="addTaxonomyBtn" class="btn btn-default">Add Taxonomy</button>	
 	</div>
-	<div id="editTaxonomyBox" style="float: left; width: 50%">
+	<!-- <div id="editTaxonomyBox" style="float: left; width: 50%">
 		<label>Edit existing one</label>
 	    <select class="form-control" id="editTaxonomyId">
 	    	<option value="-1">Selecione aqui ...</option>
@@ -66,7 +66,7 @@
 	    </select>
 	    <br>
 		<button type="button" id="editTaxonomyBtn" class="btn btn-default">Edit Taxonomy</button>	
-	</div>
+	</div> -->
 </div>
 
 <div style="clear: both;height: 30px;"></div>
@@ -74,6 +74,7 @@
 <div class="container" id="container" style="display: none;">
 	<div class="row">
 		<button type="button" class="btn btn-success" onclick="createRootNode();">Create Root Node</button>
+		<button type="button" id="saveTaxonomyBtn" class="btn btn-default">Save taxonomy fieds</button>
 		<!-- <button type="button" class="btn btn-warning" onclick="demo_rename();">Rename Field</button>
 		<button type="button" class="btn btn-danger" onclick="demo_delete();">Delete Field</button> -->
 		<h5>Use the right click on a topic to display the menu options</h5>
@@ -82,9 +83,6 @@
 		<div class="col-3">
 			<div id="jstreeTaxonomy" class="demo" style="margin-top:1em; min-height:200px;"></div>
 		</div>
-	</div>
-	<div class="row">
-		<button type="button" id="saveTaxonomyBtn" class="btn btn-blue">Save taxonomy fieds</button>
 	</div>
 </div>
 </form>

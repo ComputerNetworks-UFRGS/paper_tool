@@ -1,25 +1,16 @@
-function loadJsTree(){
-
-	$('#jstreeTaxonomy')
+function loadJsTree(jsonData){
+	$('#jstreeTaxonomy').jstree("destroy", true);
+	jsTree = $('#jstreeTaxonomy')
 		.jstree({
 			"core" : {
 				"animation" : 0,
 				"check_callback" : true,
 				'force_text' : true,
 				"themes" : { "stripes" : true },
-				'data' : {
-					'url' : 'templates/json/newTaxonomy.json',
-					// function (node) {
-					//	return node.id === '#' ? 'templates/json/newTaxonomy.json' : 'templates/ajax_demo_children.json';
-					//},
-					'data' : function (node) {
-						return { 'id' : node.id };
-					}
-				}
+				'data' : jsonData
 			},
 			"plugins" : [ "contextmenu", "dnd" , "wholerow" ]
 		});
-
 }
 
 function createRootNode() {
@@ -59,7 +50,13 @@ $(function () {
 					$("#newTaxonomyName").attr('readonly','readonly');
 					$("#container").css('display','block');
 					alertify.success('Success! Taxonomy created!');
-					loadJsTree();
+					template = [
+								  { "id" : "topic_L1_1", "text" : "Topic 1", "type" : "root" },
+								  { "id" : "topic_L1_2", "text" : "Topic 2", "type" : "root" },
+								  { "id" : "topic_L1_3", "text" : "Topic 3", "type" : "root" },
+								  { "id" : "topic_L1_4", "text" : "Topic 4", "type" : "root" }
+							   ];
+					loadJsTree(template);
 				}
 				else{
 					alertify.error('An error has occurred! Please, contact the system administrator.');
@@ -74,8 +71,28 @@ $(function () {
 			return;
 		}
 		else{
+			$("#taxonomyId").val($("#editTaxonomyId").val());
 			hideOption("addTaxonomyBox");
-			// codigo para buscar a taxonomia
+			var data = {
+				operation : 3, // loading fields
+				taxonomyId : $("#taxonomyId").val(),
+			}
+			var request = $.ajax({
+							type: "POST",
+							url: "taxonomies-con.php",
+							data: data,
+							dataType: "json"
+						  	});
+			request.done(function(result){
+				if(result){
+					$("#container").css('display','block');
+					loadJsTree(result);
+					alertify.success('Success! Fields loaded.');
+				}
+				else{
+					alertify.error('An error has occurred! Please, contact the system administrator.');
+				}
+			});
 		}
 	});
 
@@ -92,7 +109,13 @@ $(function () {
 							dataType: "json"
 						  	});
 		request.done(function(result){
-			console.log(result);
+			if(result){
+				alertify.success('Success! Fields recorded! Waiting the page reload.');
+				setTimeout(function () { location.reload(1); }, 2000);
+			}
+			else{
+				alertify.error('An error has occurred! Please, contact the system administrator.');
+			}
 		});
 	});
 });
