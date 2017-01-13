@@ -33,8 +33,56 @@ if($operation == 1){
 // Add new taxonomy fields
 if($operation == 2){
 
-	echo print_r($_REQUEST,1);
+	$tableName = "taxonomy_".$_REQUEST['taxonomyId']."_fields";
+	$sequenceName = "taxonomy_".$_REQUEST['taxonomyId']."_fields_seq";
+
+	$sSQL = "SELECT EXISTS ";
+	$sSQL.= "( SELECT 1 FROM information_schema.tables WHERE ";
+	$sSQL.= "  table_schema = 'public' AND table_name = '".$tableName."') as exist;";
+	$exist = $conexao->GetOne($sSQL);
+
+	if($exist == 'f'){
+		$conexao->Execute("create sequence ".$sequenceName.";");
+
+		$sSQL = "create table ".$tableName." ( ";
+    	$sSQL.= "	id integer DEFAULT nextval('taxonomy_1_fields_seq'::regclass) NOT NULL,";
+    	$sSQL.= "	name text,";
+    	$sSQL.= "	parent_id integer,";
+    	$sSQL.= "	active smallint DEFAULT 1";
+    	$sSQL.= " ); ";
+    	$conexao->Execute($sSQL);
+
+		$conexao->Execute("ALTER TABLE public.".$tableName." OWNER TO tool;");
+		$conexao->Execute("ALTER SEQUENCE public.".$sequenceName." OWNER TO tool;");
+	}
+
+	$treeJson = $_REQUEST['treeJson'];
+	$length = count($treeJson);
+	if(!$length){
+		echo $length;
+	}
+
+	$parentId = 0;
+	storeFields($treeJson,$length,$parentId,$tableName,$sequenceName,$conexao);
 
 }
 
+function storeFields($json,$length,$parentId,$tableName,$sequenceName,$conexao){
+
+	for($i = 0; $i < $length; $i++){
+		$topicName = $json[$i]['text']; 
+		$topicId = $conexao->GetOne("SELECT nextval('".$sequenceName."');");
+		$sSQL = " INSERT into ".$tableName." (id,name,parent_id) ";
+		$sSQL.= " values (".$topicId.",'".$topicName."',".$parentId.");";
+		//echo $sSQL."\n";
+		$conexao->Execute($sSQL);
+		if(is_array($json[$i]['children'])){
+			storeFields($json[$i]['children'],
+						count($json[$i]['children']),
+						$topicId,$tableName,
+						$sequenceName,
+						$conexao);			
+		}
+	}
+}
 ?>

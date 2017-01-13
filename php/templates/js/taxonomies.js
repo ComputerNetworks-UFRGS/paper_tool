@@ -82,7 +82,7 @@ $(function () {
 	$("#saveTaxonomyBtn").click(function(){
 		var data = {
 				operation : 2, // add new taxonomy fields
-				taxonomyId : $("#newTaxonomyName").val(),
+				taxonomyId : $("#taxonomyId").val(),
 				treeJson : $("#jstreeTaxonomy").jstree("get_json")
 			}
 		var request = $.ajax({
