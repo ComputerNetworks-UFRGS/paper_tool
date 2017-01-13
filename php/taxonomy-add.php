@@ -18,8 +18,11 @@ $smarty->assign('SYS_TITLE',SYS_TITLE);
 $smarty->assign('USERNAME',$_SESSION['username']);
 
 $conexao = ADONewConnection(DATABASE_DRIVER);
-$db->debug = true;
+//$db->debug = true;
 $conexao->Connect(DATABASE_SERVER, DATABASE_USER, DATABASE_PASSWORD, DATABASE_NAME);
+
+$sSQL = "SELECT id,name from taxonomies where active = 1 order by name";
+$smarty->assign('taxonomies', $conexao->GetAssoc($sSQL));
 
 $smarty->display('taxonomy-add.tpl');
 ?>

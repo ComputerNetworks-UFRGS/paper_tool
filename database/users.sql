@@ -14,3 +14,6 @@ ALTER TABLE ONLY users ADD CONSTRAINT users_pkey PRIMARY KEY (id);
 INSERT INTO users (username,password,email,active) VALUES 
 				  ('admin', '704b037a97fa9b25522b7c014c300f8a', 'vicoguim@gmail.com', 1);
 
+INSERT INTO users (username,password,email,active) VALUES 
+				  ('vicoguim', '4105740a8c3318922c3fba694eb2c285', 'vicoguim@gmail.com', 1);
+

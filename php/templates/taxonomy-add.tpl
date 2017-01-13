@@ -29,6 +29,9 @@
 		body {
 			background: #F5F5F5;
 		}
+		#saveTaxonomyBtn {
+			margin-top: 1em;
+		}
 	</style>
 </head>
 
@@ -38,30 +41,52 @@
 	<div class="pull-left header">
     	<h3 class="title">
             <i class="icon-file"></i>
-            Taxonomy
+            Taxonomies
       	</h3>
         <h5>
-       		Adding a new taxonomy
+       		Add/Edit taxonomy
 	</h5>
   	</div>
 </div>
+<form name="taxonomiesForm" method="post" id="taxonomiesForm">
+<input type="hidden" value="" name="taxonomyId" id="taxonomyId">
 
-<div class="container">
-	<div class="row">
-		<button type="button" class="btn btn-success" onclick="demo_create();">Create</button>
-		<button type="button" class="btn btn-warning" onclick="demo_rename();">Rename</button>
-		<button type="button" class="btn btn-danger" onclick="demo_delete();">Delete</button>
+<div style="width: 95%; margin: auto; margin-bottom: 1em;">
+	<div id="addTaxonomyBox" style="float: left; width: 50%">
+		<label>Add new taxomy</label>
+		<input type="text" class="form-control" id="newTaxonomyName" placeholder="Taxonomy name" required>
+		<br>
+		<button type="button" id="addTaxonomyBtn" class="btn btn-default">Add Taxonomy</button>	
 	</div>
-	<div class="row">
-		<div class="col-3">
-			<div id="jstree_demo" class="demo" style="margin-top:1em; min-height:200px;"></div>
-		</div>
+	<div id="editTaxonomyBox" style="float: left; width: 50%">
+		<label>Edit existing one</label>
+	    <select class="form-control" id="editTaxonomyId">
+	    	<option value="-1">Selecione aqui ...</option>
+	    	{html_options options=$taxonomies}
+	    </select>
+	    <br>
+		<button type="button" id="editTaxonomyBtn" class="btn btn-default">Edit Taxonomy</button>	
 	</div>
 </div>
 
-<!-- <div class="modal-footer">
-	<input type="submit" id="add-paper" class="btn btn-blue" value="Add paper"/>
-</div> -->
-	
+<div style="clear: both;height: 30px;"></div>
+
+<div class="container" id="container" style="display: none;">
+	<div class="row">
+		<button type="button" class="btn btn-success" onclick="createRootNode();">Create Root Node</button>
+		<!-- <button type="button" class="btn btn-warning" onclick="demo_rename();">Rename Field</button>
+		<button type="button" class="btn btn-danger" onclick="demo_delete();">Delete Field</button> -->
+		<h5>Use the right click on a topic to display the menu options</h5>
+	</div>
+	<div class="row">
+		<div class="col-3">
+			<div id="jstreeTaxonomy" class="demo" style="margin-top:1em; min-height:200px;"></div>
+		</div>
+	</div>
+	<div class="row">
+		<button type="button" id="saveTaxonomyBtn" class="btn btn-blue">Save taxonomy fieds</button>
+	</div>
+</div>
+</form>
 </body>
 </html>
