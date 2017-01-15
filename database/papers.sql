@@ -29,12 +29,10 @@ create table papers_comments (
     comment     text,
     time        timestamp   DEFAULT current_timestamp,
     user_id     integer,    
-    paper_id    integer,
-    taxonomy_id integer
+    paper_id    integer
 );
 
 ALTER TABLE public.papers_comments OWNER TO tool;
 ALTER TABLE ONLY papers_comments ADD CONSTRAINT papers_comments_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY papers_comments ADD CONSTRAINT user_fkey FOREIGN KEY (user_id) REFERENCES users (id);
 ALTER TABLE ONLY papers_comments ADD CONSTRAINT paper_fkey FOREIGN KEY (paper_id) REFERENCES papers (id);
-ALTER TABLE ONLY papers_comments ADD CONSTRAINT taxonomy_fkey FOREIGN KEY (taxonomy_id) REFERENCES taxonomies(id);

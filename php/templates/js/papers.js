@@ -1,5 +1,15 @@
+function formatOptions (option) {
+  var ele = option.element[0];
+  if (!option.id) { 
+  	return option.text; 
+  }
+  return $('<span><div class="'+$(ele).data("status")+'" style="display: inline-table;"></div> ' + option.text + '</span>');
+};
+
 $(document).ready(function() {
 
+	$('.allSelects').select2({ formatResult: formatOptions });
+	
 	$('select[name=DataTables_Table_0_length]').val(100).change();
 	
 	$('th[name=preview]').removeClass("sorting");
