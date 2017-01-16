@@ -3,8 +3,6 @@ require_once "session.php";
 require_once "../conf/general.php";
 require_once INCLUDE_ADODB;
 require_once INCLUDE_ADODB_ERROR;
-require_once PHP_INCLUDE_PATH."general.functions.php";
-
 
 $conexao = ADONewConnection(DATABASE_DRIVER);
 $conexao->Connect(DATABASE_SERVER, DATABASE_USER, DATABASE_PASSWORD, DATABASE_NAME);
