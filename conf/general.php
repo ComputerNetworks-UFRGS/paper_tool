@@ -45,4 +45,16 @@ define("CSS_LIBS_PATH","../libs/css/");
 define("SCRIPTS_PATH_TODB","../scripts/dataToDB/");
 define("SCRIPTS_PATH_FROMCSV","../scripts/processCSV/");
 
+$ratingColors = array();
+$ratingColors[0]['class'] = "circlegray";
+$ratingColors[1]['class'] = "circlegreen";
+$ratingColors[2]['class'] = "circleyellow";
+$ratingColors[3]['class'] = "circleorange";
+$ratingColors[4]['class'] = "circlered";
+$ratingColors[0]['colorCode'] = "#c5c5c5";
+$ratingColors[1]['colorCode'] = "#8fc400";
+$ratingColors[2]['colorCode'] = "#ffeb3b";
+$ratingColors[3]['colorCode'] = "#ff9800";
+$ratingColors[4]['colorCode'] = "#cc0000";
+
 ?>

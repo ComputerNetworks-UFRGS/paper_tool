@@ -100,7 +100,7 @@
 							<tr>
 								<td >{$row.id}</td>
 	            				<td >{$row.title}</td>
-	            				<td style="text-align: center; background: {$row.ratingColBackground};">
+	            				<td class="colSelectsRating" id="colSelectsRatingID_{$row.id}" style="text-align: center;" data-selectBorderColor="{$row.ratingColorCode}">
 									<select class="selectsRating" name="rate" data-paper="{$row.id}">
 										{if $row.rating == 0}
 											<option value="0" data-status="circlegray" selected>No rated</option>

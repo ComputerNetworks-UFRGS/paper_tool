@@ -113,7 +113,7 @@ if($operation == 10){
 
 	$sSQL = "UPDATE papers SET rating = ? where id = ?;";
 	if($conexao->Execute($sSQL,$params)){
-		echo 1;
+		echo json_encode($ratingColors[$_REQUEST['rating']]['colorCode']);
 	}
 	else{
 		echo 0;

@@ -6,6 +6,11 @@ function formatOptions (option) {
   return $('<span><div class="'+$(ele).data("status")+'" style="display: inline-table;"></div> ' + option.text + '</span>');
 };
 
+function changeSelect2Border(tdElement,borderColor){
+	var div = $(tdElement).children('div').eq(0);
+  	$(div).css('border','2px solid ' + borderColor);
+};
+
 $(document).ready(function() {
 
 	$('.selectsRating').select2({ formatResult: formatOptions });
@@ -26,7 +31,8 @@ $(document).ready(function() {
 						  });
 			request.done(function(result){
 				if(result){
-					
+					console.log(result);
+					changeSelect2Border($("#colSelectsRatingID_"+ paperId),result);
 					alertify.success('Success! Paper ID # '+paperId+' was rated!');
 				}
 				else{
@@ -83,17 +89,11 @@ $(document).ready(function() {
   
     });
 	
-/*
-		if(error){
-			alertify.alert(message);
-		}
-		else{
-			alertify.confirm("Do you confirm the filled data?",function(e){
-				$( "form:first" ).submit();		
-			});
-		}	
 
+	$( "tbody tr td.colSelectsRating " ).each(function( index ) {
+  		var borderColor = $(this).data('selectbordercolor');
+  		changeSelect2Border($(this),borderColor);
 	});
-*/	
+
 });
 
