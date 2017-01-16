@@ -37,7 +37,7 @@ define("JS_PATH","templates/js/");
 define("CSS_PATH","templates/css/");
 define("SVG_PATH","templates/svg/");
 
-define("SYS_TITLE","Visualization Paper");
+define("SYS_TITLE","Paper Tool");
 
 define("JS_LIBS_PATH","../libs/js/");
 define("CSS_LIBS_PATH","../libs/css/");
