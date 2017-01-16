@@ -15,6 +15,7 @@
 	<link href="{$CSS_LIBS_PATH}application.css" media="screen" rel="stylesheet" type="text/css" />
 	<link href="{$CSS_LIBS_PATH}alertify.core.css" media="screen" rel="stylesheet" type="text/css" />       
     <link href="{$CSS_LIBS_PATH}alertify.default.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="{$CSS_LIBS_PATH}jstree-style.css" media="screen" rel="stylesheet" type="text/css" />
 	<link href="{$CSS_PATH}papers.css" media="screen" rel="stylesheet" type="text/css" />
 	<link href="{$CSS_PATH}select2.css" media="screen" rel="stylesheet" type="text/css" />
 	
@@ -25,6 +26,7 @@
 	<script src="{$JS_LIBS_PATH}application.js" type="text/javascript"></script>
 	<script src="{$JS_LIBS_PATH}alertify/alertify.min.js" type="text/javascript"></script>
 	<script src="{$JS_LIBS_PATH}select2.js" type="text/javascript"></script>
+	<script src="{$JS_LIBS_PATH}jstree.js" type="text/javascript"></script>
 	<script src="{$JS_PATH}papers.js" type="text/javascript"></script>
 	
 </head>
@@ -103,7 +105,7 @@
 								<td >{$row.id}</td>
 	            				<td >{$row.title}</td>
 	            				<td class="colSelectsRating" id="colSelectsRatingID_{$row.id}" style="text-align: center;" data-selectBorderColor="{$row.ratingColorCode}">
-									<select class="selectsRating" name="rate" data-paper="{$row.id}">
+									<select class="selectsRating" name="rate" data-paperid="{$row.id}">
 										{if $row.rating == 0}
 											<option value="0" data-status="circlegray" selected>No rated</option>
 										{else}
@@ -132,7 +134,7 @@
 									</select>
 	            				</td>
 								<td style="text-align: center;">
-									<select class="selectsTaxonomies" name="taxonomies">
+									<select class="selectsTaxonomies" name="taxonomies" data-paperid="{$row.id}">
 										{$row.taxonomyOptions}
 									</select>
 								</td>
@@ -186,6 +188,7 @@
 
 {include file="paper_add_comment.tpl"}
 {include file="paper_previous_comment.tpl"}
+{include file="paper_taxonomy.tpl"}
 
 </body>
 </html>

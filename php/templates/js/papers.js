@@ -1,3 +1,25 @@
+function loadJsTree(jsonData){
+	$('#jstreeTaxonomy').jstree("destroy", true);
+	jsTree = $('#jstreeTaxonomy')
+		.jstree({
+			"core" : {
+				"animation" : 0,
+				"check_callback" : true,
+				'force_text' : true,
+				"themes" : { "stripes" : true },
+				'data' : jsonData
+			},
+			"checkbox": {
+                "keep_selected_style": false
+            },
+			"plugins" : [ "checkbox", "dnd" , "wholerow" ]
+		})
+		.bind("loaded.jstree", function (event, data) {
+            // you get two params - event & data - check the core docs for a detailed description
+            $(this).jstree("open_all");
+        });
+}
+
 function formatOptions (option) {
   var ele = option.element[0];
   if (!option.id) { 
@@ -15,14 +37,14 @@ $(document).ready(function() {
 
 	$('.selectsRating').select2({ formatResult: formatOptions });
 	$('.selectsRating').on("change",function(event) {
-		var paperId = $(this).data('paper');
+		var paperId = $(this).data('paperid');
 		var rating = $(this).val();
 		var data = {
 				"operation" : 10, // rating a paper
 				"paperId" 	: paperId,
 				"rating"	: rating
 
-			}
+			};
 			var request = $.ajax({
   								type: "POST",
   								url: "papers-con.php",
@@ -41,6 +63,31 @@ $(document).ready(function() {
 	});
 
 	$('.selectsTaxonomies').select2({ formatResult: formatOptions });
+	$('.selectsTaxonomies').on("change",function(event) {
+		var paperId = $(this).data('paperid');
+		var taxonomyId = $(this).val();
+		$('#modal-form-taxonomy').modal({show : true});
+		var data = {
+				operation  : 20, // load taxonomy fields and the selected ones
+				paperId    : paperId,
+				taxonomyId : taxonomyId
+			};
+			var request = $.ajax({
+							type: "POST",
+							url: "papers-con.php",
+							data: data,
+							dataType: "json"
+						  	});
+			request.done(function(result){
+				if(result){
+					loadJsTree(result);
+				}
+				else{
+					alertify.error('An error has occurred! Please, contact the system administrator.');
+				}
+			});
+
+	});
 	
 	$('select[name=DataTables_Table_0_length]').val(100).change();
 	
@@ -89,7 +136,7 @@ $(document).ready(function() {
 		var data = {
 				"operation" : 12, // load previous comments
 				"paperId" 	: paperId
-			}
+			};
 			var request = $.ajax({
   								type: "POST",
   								url: "papers-con.php",
