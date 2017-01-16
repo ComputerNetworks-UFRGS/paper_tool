@@ -31,7 +31,6 @@ $(document).ready(function() {
 						  });
 			request.done(function(result){
 				if(result){
-					console.log(result);
 					changeSelect2Border($("#colSelectsRatingID_"+ paperId),result);
 					alertify.success('Success! Paper ID # '+paperId+' was rated!');
 				}
@@ -66,18 +65,73 @@ $(document).ready(function() {
 
 	});
 
+	// add comment : operation 11
 	$('#btn-add-comment').click(function(){
 
+		var paperId = $( "#paper_id_comment" ).val();
+        
         $.post("papers-con.php", $("#paper-add-comment").serialize() , function(r) {
 			if(r){
-                alertify.success("OK! The comment was saved! Wait, the page will be reloaded in 5 seconds to refresh comments ...");
-				setInterval(function(){location.reload();},5000);
+                alertify.success("Success! Comments for the paper ID # "+ paperId +" was saved! ");
 			}
             else
-                alertify.error("NOK! Some problem occurred. Please, try again.");
+                alertify.error("An error has occurred! Please, contact the system administrator.");
         });
-
     });
+
+	// load previous comments : operation 12
+    $( "a.viewComments" ).click(function(){
+		var paperId = $(this).data('paperid');
+
+		var data = {
+				"operation" : 12, // load previous comments
+				"paperId" 	: paperId
+			}
+			var request = $.ajax({
+  								type: "POST",
+  								url: "papers-con.php",
+  								data: data,
+  								dataType: "json"
+						  });
+			request.done(function(result){
+				if(result){
+					var div = $("#previous-comments-body");
+					if(result == -1){
+						$(div).append($('<h3>')
+									  .css('color','#970000')
+									  .css('width','100%')
+									  .css('text-align','center')
+									  .text('No previous comments!')
+									 );
+					}
+					else{
+						var ul = $('<ul>').addClass('chat-box').addClass('timeline');
+						for(var i = 0; i < result.length; i++){
+							var li = $('<li>')
+									.addClass('gray')
+									.append($('<div>')
+											.addClass('info')
+											.append($('<span>')
+													.addClass('name')
+													.append('<span class="label label-green">COMMENT</span>')
+													.append('<strong class="indent"> '+result[i].user+' </strong> posted a comment')
+												   )
+											.append('<span class="time"><i class="icon-time"></i>'+result[i].time+'</span>')		 				   
+											)
+									.append('<div class="content"><blockquote>'+result[i].comment+'</blockquote></div>');
+							console.log(result[i].comment);
+							console.log(result[i].time);
+							console.log(result[i].user);
+							$(ul).append($(li));
+						}
+						$(div).append($(ul));
+					}
+				}
+				else{
+					alertify.error('An error has occurred! Please, contact the system administrator.');
+				}
+			});
+	});
 
 	$('#withdraw-paper').click(function(){
        
@@ -89,11 +143,15 @@ $(document).ready(function() {
   
     });
 	
-
 	$( "tbody tr td.colSelectsRating " ).each(function( index ) {
   		var borderColor = $(this).data('selectbordercolor');
   		changeSelect2Border($(this),borderColor);
 	});
+
+	$( "a.addComment" ).click(function(){
+		var paperId = $(this).data('paperid');
+		$( "#paper_id_comment" ).val(paperId);
+	});	
 
 });
 

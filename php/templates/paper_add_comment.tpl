@@ -5,9 +5,8 @@
   	</div>
   	<div>
         <form class="form-horizontal fill-up separate-sections" name="paper-add-comment" id="paper-add-comment">
-					<input type="hidden" name="operation" id="operation" value="4"/>
-					<input type="hidden" name="paper_id" id="paper_id" value="{$paper[0].id}"/>	
-					<input type="hidden" name="userid" id="userid" value="{$userid}"/>	
+					<input type="hidden" name="operation" id="operation" value="11"/>
+					<input type="hidden" name="paper_id_comment" id="paper_id_comment" value=""/>		
 					<div>
         		<textarea rows="10" name="comment" placeholder="Type comments" style="font-size: 14px;width: 99%;margin: auto;"></textarea>
       		</div>

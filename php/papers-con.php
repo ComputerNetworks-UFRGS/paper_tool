@@ -83,17 +83,6 @@ if($operation == 3){
 }
 
 // Add comment
-if($operation == 4){
-
-	$_REQUEST['comment'] = pg_escape_string($_REQUEST['comment']);
-
-	$conexao->Execute("INSERT INTO papers_nm_comments (comments,user_id,paper_id) values ('".$_REQUEST['comment']."','".$_REQUEST['userid']."','".$_REQUEST['paper_id']."');");
-
-    echo $conexao->GetOne("SELECT count(*) from papers_nm_comments where paper_id = '".$_REQUEST['paper_id']."';"); 
-
-}
-
-// Add comment
 if($operation == 5){
 
 	$_REQUEST['comment'] = pg_escape_string($_REQUEST['comment']);
@@ -119,6 +108,48 @@ if($operation == 10){
 		echo 0;
 	}
 
+}
+
+// Add comment
+if($operation == 11){
+
+	$params = array();
+	$params[] = $_REQUEST['comment'];
+	$params[] = $_SESSION['userid'];
+	$params[] = $_REQUEST['paper_id_comment'];
+
+	$sSQL = "INSERT INTO papers_comments (comment,user_id,paper_id) values (?,?,?);";
+
+	if($conexao->Execute($sSQL,$params)){
+		echo 1;
+	}
+	else{
+		echo 0;
+	}
+}
+
+// Load comments
+if($operation == 12){
+
+	$params = array();
+	$params[] = $_REQUEST['paperId'];
+
+	$sSQL = " SELECT papers_comments.id,papers_comments.comment,";
+	$sSQL.= " to_char(papers_comments.time,'FMMonth, FMDD HH24:MI:SS') as time,users.username as user ";
+	$sSQL.= " from papers_comments,users where paper_id = ? and papers_comments.user_id = users.id;";
+
+	$result = $conexao->GetArray($sSQL,$params);
+
+	if(count($result) > 0){
+		echo json_encode($result);
+	}
+	elseif(count($result) == 0){
+		echo -1;
+	}
+	else{
+		echo 0;		
+	}
+	
 }
 
 ?>

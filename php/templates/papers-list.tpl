@@ -133,13 +133,12 @@
 									<select class="selectsTaxonomies" name="taxonomies">
 										{$row.taxonomyOptions}
 									</select>
-									<div class="{$row.taxonomyIcon}" style="display: inline-table"></div>
 								</td>
 	                            <td style="text-align: center;">
-									<a class="a-menu tip" title="" data-toggle="modal" href="#modal-form-add-comment" data-original-title="New comment">
+									<a class="a-menu tip addComment" data-paperid="{$row.id}" title="New comment" data-toggle="modal" href="#modal-form-add-comment" data-original-title="New comment">
       									<i class="icon-comment"></i>
     								</a>
-    								<a class="a-menu tip" title="" data-toggle="modal" href="#modal-form-add-previous-comment" data-original-title="Previous comments">
+    								<a class="a-menu tip viewComments" data-paperid="{$row.id}" title="Previous comments" data-toggle="modal" href="#modal-form-previous-comment" data-original-title="Previous comments">
       									<i class="icon-comments-alt"></i>
     								</a>	
 								</td>
@@ -182,6 +181,9 @@
 	{/if}
 	{assign var=cont value=$cont+1}
 {/foreach}
+
+{include file="paper_add_comment.tpl"}
+{include file="paper_previous_comment.tpl"}
 
 </body>
 </html>
