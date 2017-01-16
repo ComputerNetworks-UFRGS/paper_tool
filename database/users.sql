@@ -15,5 +15,7 @@ INSERT INTO users (username,password,email,active) VALUES
 				  ('admin', '704b037a97fa9b25522b7c014c300f8a', 'vicoguim@gmail.com', 1);
 
 INSERT INTO users (username,password,email,active) VALUES 
-				  ('vicoguim', '4105740a8c3318922c3fba694eb2c285', 'vicoguim@gmail.com', 1);
+				  ('vicoguim', 'b60ee53c669aa8f5bc723b41b7377f04', 'vicoguim@gmail.com', 1);
 
+INSERT INTO users (username,password,email,active) VALUES 
+				  ('lisandro', 'acb9bbaeb22f2c22e0d5dd292c81c7cb', 'lisandro.granville@gmail.com', 1);
