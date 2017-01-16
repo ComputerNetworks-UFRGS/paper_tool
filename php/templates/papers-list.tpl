@@ -43,6 +43,7 @@
   	</div>
 </div>
 
+<!--
 <div class="paper_info">
     <h3>Some instructions:</h3>
 	<h5>"VS" and "NS" columns show, respectively, the score of the paper in the visualization and network management fields.</h5>
@@ -51,7 +52,8 @@
 	<h5>The red circle (<div class="circleorange" style="display: inline-table;"></div>) means that the paper either has not been evaluated or may be withdrawn (a first analysis was already done). Otherwise, is used a green circle (<div class="circleg" style="display: inline-table;"></div>).</h5>
 	<h5>To evaluate a paper in a taxonomy, just click on the corresponding circle.</h5>
 	<h5>PS: circles in the column "V" are disabled, because the Visualization taxonomy was not defined yet.</h5>
-</div>
+</div> 
+-->
 
 <hr class="divider"></hr>
 

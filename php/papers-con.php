@@ -134,9 +134,11 @@ if($operation == 12){
 	$params = array();
 	$params[] = $_REQUEST['paperId'];
 
-	$sSQL = " SELECT papers_comments.id,papers_comments.comment,";
-	$sSQL.= " to_char(papers_comments.time,'FMMonth, FMDD HH24:MI:SS') as time,users.username as user ";
-	$sSQL.= " from papers_comments,users where paper_id = ? and papers_comments.user_id = users.id;";
+	$sSQL = " SELECT papers_comments.id, ";
+	$sSQL.= " regexp_replace(papers_comments.comment, E'[\\n\\r\\u2028]+', '<br>', 'g' ) as comment, ";
+	$sSQL.= " to_char(papers_comments.time,'FMMonth, FMDD HH24:MI:SS') as time, ";
+	$sSQL.= " users.username as user from papers_comments,users where ";
+	$sSQL.= " paper_id = ? and papers_comments.user_id = users.id order by time desc ";
 
 	$result = $conexao->GetArray($sSQL,$params);
 

@@ -8,7 +8,7 @@
 					<input type="hidden" name="operation" id="operation" value="11"/>
 					<input type="hidden" name="paper_id_comment" id="paper_id_comment" value=""/>		
 					<div>
-        		<textarea rows="10" name="comment" placeholder="Type comments" style="font-size: 14px;width: 99%;margin: auto;"></textarea>
+        		<textarea rows="10" name="comment" id="comment" placeholder="Type comments" style="font-size: 14px;width: 99%;margin: auto;"></textarea>
       		</div>
 				</form>
   	</div>

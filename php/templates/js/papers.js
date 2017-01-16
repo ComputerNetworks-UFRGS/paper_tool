@@ -53,6 +53,7 @@ $(document).ready(function() {
 	$('th[name=Man]').removeClass("sorting");
     $('th[name=Man]').removeAttr("aria-controls");
 
+    /*
 	$('#save-paper').click(function(){
 	
 		$.post("papers-con.php", $("#taxonomy-id").serialize() , function(r) {
@@ -64,6 +65,7 @@ $(document).ready(function() {
 		});				
 
 	});
+	*/
 
 	// add comment : operation 11
 	$('#btn-add-comment').click(function(){
@@ -72,6 +74,7 @@ $(document).ready(function() {
         
         $.post("papers-con.php", $("#paper-add-comment").serialize() , function(r) {
 			if(r){
+				$("#comment").val();
                 alertify.success("Success! Comments for the paper ID # "+ paperId +" was saved! ");
 			}
             else
@@ -96,6 +99,7 @@ $(document).ready(function() {
 			request.done(function(result){
 				if(result){
 					var div = $("#previous-comments-body");
+					$(div).empty();
 					if(result == -1){
 						$(div).append($('<h3>')
 									  .css('color','#970000')
@@ -119,9 +123,6 @@ $(document).ready(function() {
 											.append('<span class="time"><i class="icon-time"></i>'+result[i].time+'</span>')		 				   
 											)
 									.append('<div class="content"><blockquote>'+result[i].comment+'</blockquote></div>');
-							console.log(result[i].comment);
-							console.log(result[i].time);
-							console.log(result[i].user);
 							$(ul).append($(li));
 						}
 						$(div).append($(ul));
@@ -133,6 +134,7 @@ $(document).ready(function() {
 			});
 	});
 
+    /*
 	$('#withdraw-paper').click(function(){
        
 		alertify.confirm("Are you sure? This action will remove this paper of the papers list. If you have some doubt regarding this action, please contact vtguimaraes@inf.ufrgs.br", function (e) {	
@@ -142,6 +144,7 @@ $(document).ready(function() {
 		});
   
     });
+    */
 	
 	$( "tbody tr td.colSelectsRating " ).each(function( index ) {
   		var borderColor = $(this).data('selectbordercolor');
