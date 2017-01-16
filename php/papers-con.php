@@ -193,4 +193,45 @@ if($operation == 20){
 
 }
 
+// Save taxonomy fields
+if($operation == 21){
+
+	$paperId = $_REQUEST['paperId'];
+	$taxonomyId = $_REQUEST['taxonomyId'];
+	$treeJson = $_REQUEST['treeJson'];
+
+	$params = array();
+	$params[] = $paperId;
+	$params[] = $taxonomyId;
+
+	$sSQL = "DELETE FROM papers_taxonomies where paper_id = ? and taxonomy_id = ?;";
+	$conexao->Execute($sSQL,$params);
+
+	$length = count($treeJson);
+	storePaperTaxonomyFields($treeJson,$length,$paperId,$taxonomyId,$conexao);
+	echo 1;
+
+}
+
+function storePaperTaxonomyFields($treeJson,$length,$paperId,$taxonomyId,$conexao){
+
+	for($i = 0; $i < $length; $i++){		
+		$isSelected = $treeJson[$i]['state']['selected'];
+		if($isSelected === "true"){
+			$params = array();
+			$params[] = $paperId;
+			$params[] = $taxonomyId;
+			$params[] = $treeJson[$i]['id'];
+			$sSQL = "INSERT INTO papers_taxonomies (paper_id,taxonomy_id,topic_id) VALUES (?,?,?);";
+			$conexao->Execute($sSQL,$params);
+		}
+		if(is_array($treeJson[$i]['children'])){
+			storePaperTaxonomyFields($treeJson[$i]['children'],
+						count($treeJson[$i]['children']),
+						$paperId,
+						$taxonomyId,
+						$conexao);			
+		}
+	}
+}
 ?>

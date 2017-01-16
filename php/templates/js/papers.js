@@ -80,6 +80,8 @@ $(document).ready(function() {
 						  	});
 			request.done(function(result){
 				if(result){
+					$( "#modal_paperid" ).val(paperId);
+					$( "#modal_taxonomyid" ).val(taxonomyId);
 					loadJsTree(result);
 				}
 				else{
@@ -89,6 +91,35 @@ $(document).ready(function() {
 
 	});
 	
+	$('#btn-save-paper-taxonomy').click(function(){
+
+		var paperId = $( "#modal_paperid" ).val();
+		var taxonomyId = $( "#modal_taxonomyid" ).val();
+        
+        var data = {
+				operation 	: 21, // save taxonomy for a paper
+				paperId 	: paperId,
+				taxonomyId 	: taxonomyId,
+				treeJson 	: $("#jstreeTaxonomy").jstree("get_json")
+			}
+		var request = $.ajax({
+							type: "POST",
+							url: "papers-con.php",
+							data: data,
+							dataType: "json"
+						  	});
+		request.done(function(result){
+
+			if(result){
+				alertify.success('Success! Fields recorded! Waiting the page reload.');
+				setTimeout(function () { location.reload(1); }, 1000);
+			}
+			else{
+				alertify.error('An error has occurred! Please, contact the system administrator.');
+			}
+		});
+    });
+
 	$('select[name=DataTables_Table_0_length]').val(100).change();
 	
 	$('th[name=preview]').removeClass("sorting");
