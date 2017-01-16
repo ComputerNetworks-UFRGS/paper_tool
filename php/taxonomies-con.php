@@ -33,8 +33,7 @@ $operation = $_REQUEST["operation"];
 // Add taxonomy
 if($operation == 1){
 	
-	$id = $conexao->GetOne("SELECT nextval('taxonomies_seq');");
-	$ext = explode(".", $_FILES["paper"]["name"]);	
+	$id = $conexao->GetOne("SELECT nextval('taxonomies_seq');");	
 
 	$params = array();
 	$params[] = $id;
@@ -49,6 +48,7 @@ if($operation == 1){
     	echo 0;
     }
 }
+
 // Storing taxonomy fields
 if($operation == 2){
 
