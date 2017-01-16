@@ -8,7 +8,34 @@ function formatOptions (option) {
 
 $(document).ready(function() {
 
-	$('.allSelects').select2({ formatResult: formatOptions });
+	$('.selectsRating').select2({ formatResult: formatOptions });
+	$('.selectsRating').on("change",function(event) {
+		var paperId = $(this).data('paper');
+		var rating = $(this).val();
+		var data = {
+				"operation" : 10, // rating a paper
+				"paperId" 	: paperId,
+				"rating"	: rating
+
+			}
+			var request = $.ajax({
+  								type: "POST",
+  								url: "papers-con.php",
+  								data: data,
+  								dataType: "json"
+						  });
+			request.done(function(result){
+				if(result){
+					
+					alertify.success('Success! Paper ID # '+paperId+' was rated!');
+				}
+				else{
+					alertify.error('An error has occurred! Please, contact the system administrator.');
+				}
+			});
+	});
+
+	$('.selectsTaxonomies').select2({ formatResult: formatOptions });
 	
 	$('select[name=DataTables_Table_0_length]').val(100).change();
 	

@@ -3,8 +3,6 @@ require_once "session.php";
 require_once "../conf/general.php";
 require_once INCLUDE_ADODB;
 require_once INCLUDE_ADODB_ERROR;
-require_once PHP_INCLUDE_PATH."general.functions.php";
-require_once PHP_INCLUDE_PATH."topology.functions.php";
 
 $conexao = ADONewConnection(DATABASE_DRIVER);
 //$db->debug = true;
@@ -103,6 +101,23 @@ if($operation == 5){
 	$conexao->Execute("INSERT INTO papers_viz_comments (comments,user_id,paper_id) values ('".$_REQUEST['comment']."','".$_REQUEST['userid']."','".$_REQUEST['paper_id']."');");
 
     echo $conexao->GetOne("SELECT count(*) from papers_viz_comments where paper_id = '".$_REQUEST['paper_id']."';"); 
+
+}
+
+// rating a paper
+if($operation == 10){
+
+	$params = array();
+	$params[] = $_REQUEST['rating'];
+	$params[] = $_REQUEST['paperId'];
+
+	$sSQL = "UPDATE papers SET rating = ? where id = ?;";
+	if($conexao->Execute($sSQL,$params)){
+		echo 1;
+	}
+	else{
+		echo 0;
+	}
 
 }
 

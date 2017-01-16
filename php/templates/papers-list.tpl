@@ -101,7 +101,7 @@
 								<td >{$row.id}</td>
 	            				<td >{$row.title}</td>
 	            				<td style="text-align: center; background: {$row.ratingColBackground};">
-									<select class="allSelects" name="rate" data-paper="{$row.id}">
+									<select class="selectsRating" name="rate" data-paper="{$row.id}">
 										{if $row.rating == 0}
 											<option value="0" data-status="circlegray" selected>No rated</option>
 										{else}
@@ -130,7 +130,7 @@
 									</select>
 	            				</td>
 								<td style="text-align: center;">
-									<select class="allSelects" name="taxonomies">
+									<select class="selectsTaxonomies" name="taxonomies">
 										{$row.taxonomyOptions}
 									</select>
 									<div class="{$row.taxonomyIcon}" style="display: inline-table"></div>
