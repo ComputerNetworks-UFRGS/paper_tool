@@ -15,7 +15,6 @@ function loadJsTree(jsonData){
 			"plugins" : [ "checkbox", "dnd" , "wholerow" ]
 		})
 		.bind("loaded.jstree", function (event, data) {
-            // you get two params - event & data - check the core docs for a detailed description
             $(this).jstree("open_all");
         });
 }
@@ -225,6 +224,11 @@ $(document).ready(function() {
     */
 	
 	$( "tbody tr td.colSelectsRating " ).each(function( index ) {
+  		var borderColor = $(this).data('selectbordercolor');
+  		changeSelect2Border($(this),borderColor);
+	});
+
+	$( "tbody tr td.colSelectsTaxonomies " ).each(function( index ) {
   		var borderColor = $(this).data('selectbordercolor');
   		changeSelect2Border($(this),borderColor);
 	});

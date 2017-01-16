@@ -21,8 +21,6 @@ $conexao = ADONewConnection(DATABASE_DRIVER);
 //$db->debug = true;
 $conexao->Connect(DATABASE_SERVER, DATABASE_USER, DATABASE_PASSWORD, DATABASE_NAME);
 
-//$sSQL = "SELECT *,(select count(*) from papers_nm_subtopic where papers_nm_subtopic.paper_id=papers.id) as man,(select count(*) from papers_viz_subtopic where papers_viz_subtopic.paper_id=papers.id) as viz from papers where status=1 order by year desc, title asc;";
-
 $sSQL = "SELECT id,name from taxonomies where active=1 order by name;";
 $taxonomies = $conexao->GetArray($sSQL);
 
@@ -36,11 +34,13 @@ for($i = 0; $i < $c1 ; $i++){
 
 	$str = '<option value="0" selected>Select here ...</option>';
 	$icon = $ratingColors[1]['class'];
+	$taxonomyColorCode = $ratingColors[1]['colorCode'];
 	for($j = 0; $j < $c2 ; $j++){
 		$sSQL = " SELECT count(*) from papers_taxonomies where ";
 		$sSQL.= " paper_id = '".$papers[$i]['id']."' and taxonomy_id = '".$taxonomies[$j]['id']."';";
 		if($conexao->GetOne($sSQL) == 0){
 			$class = $icon = $ratingColors[4]['class'];
+			$taxonomyColorCode = $ratingColors[4]['colorCode'];
 		}
 		else{
 			$class = $ratingColors[1]['class'];
@@ -50,6 +50,7 @@ for($i = 0; $i < $c1 ; $i++){
 
 	$papers[$i]['taxonomyOptions'] = $str;
 	$papers[$i]['taxonomyIcon'] = $icon;
+	$papers[$i]['taxonomyColorCode'] = $taxonomyColorCode;
 
 }
 

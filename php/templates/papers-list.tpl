@@ -133,7 +133,7 @@
 										{/if}
 									</select>
 	            				</td>
-								<td style="text-align: center;">
+								<td class="colSelectsTaxonomies" id="colSelectsTaxonomiesID_{$row.id}" data-selectBorderColor="{$row.taxonomyColorCode}" style="text-align: center;">
 									<select class="selectsTaxonomies" name="taxonomies" data-paperid="{$row.id}">
 										{$row.taxonomyOptions}
 									</select>
@@ -155,18 +155,47 @@
 							<tr>
 								<td >{$row.id}</td>
 	            				<td >{$row.title}</td>
-	            				<td style="text-align: center;">
-
+	            				<td class="colSelectsRating" id="colSelectsRatingID_{$row.id}" style="text-align: center;" data-selectBorderColor="{$row.ratingColorCode}">
+									<select class="selectsRating" name="rate" data-paperid="{$row.id}">
+										{if $row.rating == 0}
+											<option value="0" data-status="circlegray" selected>No rated</option>
+										{else}
+											<option value="0" data-status="circlegray">No rated</option>
+										{/if}
+										{if $row.rating == 1}
+											<option value="1" data-status="circlegreen" selected>Excelent</option>
+										{else}
+											<option value="1" data-status="circlegreen">Excelent</option>
+										{/if}
+										{if $row.rating == 2}
+											<option value="2" data-status="circleyellow" selected>Good</option>
+										{else}
+											<option value="2" data-status="circleyellow">Good</option>
+										{/if}
+										{if $row.rating == 3}
+											<option value="3" data-status="circleorange" selected>Average</option>
+										{else}
+											<option value="3" data-status="circleorange">Average</option>
+										{/if}
+										{if $row.rating == 4}
+											<option value="4" data-status="circlered" selected>Poor</option>
+										{else}
+											<option value="4" data-status="circlered">Poor</option>
+										{/if}
+									</select>
 	            				</td>
-								<td style="text-align: center;">
-									<select class="allSelects" name="year">
-										<option value="1" data-status="circlegreen">teste 1</option>
-										<option value="2" data-status="circlered">teste 2</option>
-										<option value="3" data-status="circlegreen">teste 3</option>
+								<td class="colSelectsTaxonomies" id="colSelectsTaxonomiesID_{$row.id}" data-selectBorderColor="{$row.taxonomyColorCode}" style="text-align: center;">
+									<select class="selectsTaxonomies" name="taxonomies" data-paperid="{$row.id}">
+										{$row.taxonomyOptions}
 									</select>
 								</td>
 	                            <td style="text-align: center;">
-									comments
+									<a class="a-menu tip addComment" data-paperid="{$row.id}" title="New comment" data-toggle="modal" href="#modal-form-add-comment" data-original-title="New comment">
+      									<i class="icon-comment"></i>
+    								</a>
+    								<a class="a-menu tip viewComments" data-paperid="{$row.id}" title="Previous comments" data-toggle="modal" href="#modal-form-previous-comment" data-original-title="Previous comments">
+      									<i class="icon-comments-alt"></i>
+    								</a>	
 								</td>
 	            				<td class="center ">{$row.citations}</td>
 	            				<td >{$row.venue}<a href="{$row.site}" target="_blank">&nbsp;<i class="icon-external-link"></a></td>
