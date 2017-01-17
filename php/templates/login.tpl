@@ -51,12 +51,12 @@
           					</div>
 							{if $erro}
 								<div style="text-align: center;">
-                                	<p style="color: red;"><strong>Dados de acesso incorretos!</strong></p>
-                            	</div>
+                  <p style="color: red;"><strong>Please, check your username and/or password!</strong></p>
+                </div>
 							{/if}
 							<div>
-            					<a class="btn btn-blue btn-block" id="btn" href="#">Login <i class="icon-signin"></i></a>
-          					</div>
+            	   <a class="btn btn-blue btn-block" id="btn" href="#">Login <i class="icon-signin"></i></a>
+          		</div>
 						</form>
       				</div>
 				</div>
