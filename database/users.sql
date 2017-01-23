@@ -11,6 +11,18 @@ create table users (
 ALTER TABLE public.users OWNER TO tool;
 ALTER TABLE ONLY users ADD CONSTRAINT users_pkey PRIMARY KEY (id);
 
+create sequence users_log_seq;
+create table users_log (
+    id integer DEFAULT nextval('users_log_seq'::regclass) NOT NULL,
+    user_id integer,
+    date_hour timestamp DEFAULT current_timestamp,
+    user_agent text
+);
+
+ALTER TABLE public.users_log OWNER TO tool;
+ALTER TABLE ONLY users_log ADD CONSTRAINT users_log_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY users_log ADD CONSTRAINT user_log_fkey FOREIGN KEY (user_id) REFERENCES users (id);
+
 INSERT INTO users (username,password,email,active) VALUES 
 				  ('admin', '704b037a97fa9b25522b7c014c300f8a', 'vicoguim@gmail.com', 1);
 -- xururu

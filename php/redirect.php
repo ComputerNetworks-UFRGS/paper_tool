@@ -25,6 +25,13 @@ else
 		{
 		$_SESSION["userid"] = $userid; 
 		$_SESSION["username"] = $_POST['username']; 
+
+		$params = array();
+		$params[] = $userid;
+		$params[] = $_SERVER['HTTP_USER_AGENT'];
+
+		$sSQL = "insert into users_log (user_id,user_agent) values (?,?)";
+		$conexao->Execute($sSQL,$params);
 		
 		header("location: main.php");
 		}
