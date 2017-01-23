@@ -85,6 +85,7 @@
                         <ul class="dropdown-menu">
 							<li><a href="papers-list.php" target="iframe-body">List</a></li>
                             <li><a href="papers-add.php" target="iframe-body">Add</a></li>
+                            <li><a href="papers-csv.php" target="iframe-body">Upload CSV</a></li>
                         </ul>
                     </li>
 					<!--

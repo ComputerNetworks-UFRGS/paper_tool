@@ -1,11 +1,22 @@
 <?php
 require_once "session.php";
 require_once "../conf/general.php";
+require_once INCLUDE_SMARTY;
 require_once INCLUDE_ADODB;
 require_once INCLUDE_ADODB_ERROR;
 
+$smarty = new Smarty();
+
+$smarty->assign('IMAGES_PATH',IMAGES_PATH);
+$smarty->assign('JS_PATH',JS_PATH);
+$smarty->assign('CSS_PATH',CSS_PATH);
+$smarty->assign('JS_LIBS_PATH',JS_LIBS_PATH);
+$smarty->assign('CSS_LIBS_PATH',CSS_LIBS_PATH);
+$smarty->assign('SYS_TITLE',SYS_TITLE);
+
+
+
 $conexao = ADONewConnection(DATABASE_DRIVER);
-//$db->debug = true;
 $conexao->Connect(DATABASE_SERVER, DATABASE_USER, DATABASE_PASSWORD, DATABASE_NAME);
 
 $operation = $_REQUEST["operation"];
@@ -16,81 +27,79 @@ if($operation == 1){
 	$ext = explode(".", $_FILES["paper"]["name"]);
 	$file_name = $id.".".$ext[count($ext) - 1];
 
+	$error = 0;
 	$uploadfile = PAPERS_PATH . $file_name;
 	if (move_uploaded_file($_FILES['paper']['tmp_name'], $uploadfile)) {
 		$sSQL = "INSERT INTO papers (id,year,citations,title,venue,site,comments,file) values ";
     	$sSQL.= "($id,".$_REQUEST['year'].",".$_REQUEST['citations'].",'".$_REQUEST['title']."','".$_REQUEST['venue']."','".$_REQUEST['site']."','".$_REQUEST['comments']."', '$file_name');";
     	
-		$msg = "Success! Paper was recorded.";
-	
-		$conexao->Execute($sSQL);
-		header("location: feedback.php?msg=$msg");
+    	if($conexao->Execute($sSQL)){
+			$msg = "Success! Paper was recorded.";
+		}
+		else{
+			$error = 1;
+			$msg = "Oops! Paper was not recorded.";
+		}
 	}
  	else {
-
+ 		$error = 1;
 		$msg = "Oops! Paper was not recorded.";
-
-		header("location: feedback.php?msg=$msg");
 	}
+	$smarty->assign('error',$error);
+	$smarty->assign('msg',$msg);
+	$smarty->assign('operation',$operation);
+	$smarty->display('feedback.tpl');
 }
 
-// Save network taxonomy
+// Add paper by CSV
 if($operation == 2){
 
-	$conexao->Execute("DELETE FROM papers_nm_subtopic WHERE paper_id = '".$_REQUEST['paper_id']."';");
-	
-	for($i = 0; $i < count($_REQUEST['subtopic']); $i++){
-		$conexao->Execute("INSERT INTO papers_nm_subtopic (paper_id,nm_subtopic_id) VALUES ('".$_REQUEST['paper_id']."','".$_REQUEST['subtopic'][$i]."');");
+	$uploadfile = "/tmp/".$_FILES["csvfile"]["name"];
+	if (move_uploaded_file($_FILES['csvfile']['tmp_name'], $uploadfile)) {
+		$fp = fopen($uploadfile,"r+");
+		$line = trim(fgets($fp));
+		$error = 0;
+		$papers = array();
+		$conexao->StartTrans();
+		while($line = trim(fgets($fp))){
+			$arr = explode(";",$line);
+			if(count($arr) != 7){
+				$msg = 'Error processing the CSV file! Please, contact the system administrator.';
+				$error = 1;
+				$conexao->FailTrans();
+				break;
+			}
+			if(strlen($arr[1]) == 0){
+				$msg = 'Error processing the CSV file! Field year is empty for paper: ';
+				$msg.= '<br>"'.$arr[0].'".';
+				$error = 1;
+				$conexao->FailTrans();
+				break;		
+			}
+			if(strlen($arr[2]) == 0){
+				$arr[2] = 0;
+			}
+			$sSQL = "insert into papers (title,year,citations,venue,site,comments,file) values (?,?,?,?,?,?,?)";
+			if(!$conexao->Execute($sSQL,$arr)){
+				$msg = 'Error processing the CSV file! Please, contact the system administrator.';
+				$error = 1;
+				$conexao->FailTrans();
+				break;		
+			}
+			$papers[] = $arr;
+		}
+		fclose($fp);
+		if(!$error){
+			$conexao->CompleteTrans();
+			$msg = 'Success! CSV file processed.';
+		}
+		$conexao->Close();
+		$smarty->assign('error',$error);
+		$smarty->assign('msg',$msg);
+		$smarty->assign('papers',$papers);
+		$smarty->assign('operation',$operation);
+		$smarty->display('feedback.tpl');
 	}
-
-	if(!isset($_REQUEST['star1']))
-		$rating = 0;
-	else
-		$rating = $_REQUEST['star1'];
-
-	$conexao->Execute("UPDATE papers SET network_rating = '".$rating."' where id = '".$_REQUEST['paper_id']."';");
-
-	echo "1";
-}
-
-// Save visualization taxonomy
-if($operation == 6){
-
-	$conexao->Execute("DELETE FROM papers_viz_subtopic WHERE paper_id = '".$_REQUEST['paper_id']."';");
-	
-	for($i = 0; $i < count($_REQUEST['subtopic']); $i++){
-		$conexao->Execute("INSERT INTO papers_viz_subtopic (paper_id,viz_subtopic_id) VALUES ('".$_REQUEST['paper_id']."','".$_REQUEST['subtopic'][$i]."');");
-	}
-
-	if(!isset($_REQUEST['star1']))
-		$rating = 0;
-	else
-		$rating = $_REQUEST['star1'];
-
-	$conexao->Execute("UPDATE papers SET visualization_rating = '".$rating."' where id = '".$_REQUEST['paper_id']."';");
-
-	echo "1";
-}
-
-// Withdraw paper
-if($operation == 3){
-
-	$conexao->Execute("UPDATE papers SET status = 0 where id = '".$_REQUEST['paper_id']."';");
-	
-	$msg = "OK! Paper was withdrawn.";
-    header("location: feedback.php?msg=$msg");
-
-}
-
-// Add comment
-if($operation == 5){
-
-	$_REQUEST['comment'] = pg_escape_string($_REQUEST['comment']);
-
-	$conexao->Execute("INSERT INTO papers_viz_comments (comments,user_id,paper_id) values ('".$_REQUEST['comment']."','".$_REQUEST['userid']."','".$_REQUEST['paper_id']."');");
-
-    echo $conexao->GetOne("SELECT count(*) from papers_viz_comments where paper_id = '".$_REQUEST['paper_id']."';"); 
-
 }
 
 // rating a paper

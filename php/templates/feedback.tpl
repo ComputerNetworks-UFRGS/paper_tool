@@ -23,12 +23,72 @@
 	<![endif]-->
 	<script src="{$JS_LIBS_PATH}application.js" type="text/javascript"></script>
 	<script src="{$JS_LIBS_PATH}alertify/alertify.min.js" type="text/javascript"></script>
-	<script src="{$JS_PATH}papers.js" type="text/javascript"></script>
-	
+	<style type="text/css">
+		table {
+			border-collapse: collapse;
+			width: 90%;
+			margin: auto;
+		}
+		table thead tr th {
+			border: 1px solid black;
+			padding: 5px;
+			background-color: black;
+			color: white;
+		}
+		table tbody tr td {
+			border: 1px solid black;
+			padding: 5px;
+		}
+	</style>
 </head>
 <body >
-
-	<h1 class="feedback">{$msg}</h1>
+	{if $operation == 1}
+		{if $error}
+			<h1 class="feedback" style="color:red;">{$msg}</h1>
+		{else}
+			<h1 class="feedback">{$msg}</h1>
+		{/if}
+	{/if}
+	
+	{if $operation == 2}
+		{if $error}
+			<h2 class="feedback" style="color:red; text-align: center;">{$msg}</h2>
+		{else}
+			<h2 style="color:blue; text-align: center;">{$msg}</h2>
+			<hr>
+			<h4 style="text-align: center;">See the inserted papers below</h4>
+			<table>
+				<thead>
+					<tr>
+						<th></th>
+						<th>Title</th>
+						<th>Year</th>
+						<th>Citations</th>
+						<th>Venue</th>
+						<th>Venue site</th>
+						<th>Search query</th>
+						<th>File name</th>
+					</tr>
+				</thead>
+				<tbody>
+				{assign var="cont" value="1"}
+				{foreach from=$papers item=row}				
+					<tr>
+						<td>{$cont}</td>
+						<td>{$row[0]}</td>
+						<td>{$row[1]}</td>
+						<td>{$row[2]}</td>
+						<td>{$row[3]}</td>
+						<td>{$row[4]}</td>
+						<td>{$row[5]}</td>
+						<td>{$row[6]}</td>
+					</tr>	
+					{assign var=cont value=$cont+1}			
+				{/foreach}
+				</tbody>
+		</table>
+		{/if}
+	{/if}
 
 </body>
 </html>
