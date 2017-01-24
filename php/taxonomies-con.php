@@ -64,7 +64,7 @@ if($operation == 2){
 		$conexao->Execute("create sequence ".$sequenceName.";");
 
 		$sSQL = "create table ".$tableName." ( ";
-    	$sSQL.= "	id integer DEFAULT nextval('taxonomy_1_fields_seq'::regclass) NOT NULL,";
+    	$sSQL.= "	id integer DEFAULT nextval('".$sequenceName."'::regclass) NOT NULL,";
     	$sSQL.= "	name text,";
     	$sSQL.= "	parent_id integer,";
     	$sSQL.= "	active smallint DEFAULT 1,";
