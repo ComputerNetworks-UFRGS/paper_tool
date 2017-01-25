@@ -42,25 +42,24 @@
 </div>
 
   	<div class="modal-body">
+  	<form name="form" class="form-horizontal fill-up separate-sections" method="post" enctype="multipart/form-data" action="papers-con.php">
+  		<input type="hidden" value="2" id="operation" name="operation"/>			
   		<div>
-  			<p>You can find below an example of the .XLSX file and the .CSV. The CSV fields must be separated by semicolon (;) and the head columns in red are required (i.e., title, year, and file name).</p>
-  			<a href="misc/spreadsheet-example.xlsx"><img src="{$IMAGES_PATH}/xlsx-icon.png" style="width: 5em;"></a>
-  			<span>=></span>
-  			<a href="misc/spreadsheet-example.csv"><img src="{$IMAGES_PATH}/csv-icon.png" style="width: 5em;"></a>
-  		</div>
-  		<hr>
-    	<form name="form" class="form-horizontal fill-up separate-sections" method="post" enctype="multipart/form-data" action="papers-con.php">
-		<input type="hidden" value="2" id="operation" name="operation"/>			
+  			<label>Select the template below</label>
+	       	<select class="chzn-select" name="fileTemplate">
+				<option value="1">IEEEXplore CSV</option>
+	        </select>  
+	    </div>
         <div>
-            <label>CSV upload</label>
+            <label>File upload</label>
 			<div class="uploader">
         	<input name="csvfile" type="file" required><span style="-moz-user-select: none;" class="filename">No file selected</span><span style="-moz-user-select: none;" class="action">+</span>
 			</div>
 		</div>
-	</div>
-	<div class="modal-footer">
-    	<input type="submit" id="upload-csv" class="btn btn-blue" value="Upload CSV"/>
+		<div class="modal-footer">
+    	<input type="submit" id="upload-csv" class="btn btn-blue" value="Process file"/>
   	</div>
+	</div>
 	</form>
 
 </body>

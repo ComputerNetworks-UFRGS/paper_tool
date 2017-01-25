@@ -56,18 +56,15 @@
 		{else}
 			<h2 style="color:blue; text-align: center;">{$msg}</h2>
 			<hr>
-			<h4 style="text-align: center;">See the inserted papers below</h4>
+			<h4 style="text-align: center;">See the log below</h4>
 			<table>
 				<thead>
 					<tr>
 						<th></th>
 						<th>Title</th>
-						<th>Year</th>
-						<th>Citations</th>
-						<th>Venue</th>
-						<th>Venue site</th>
-						<th>Search query</th>
-						<th>File name</th>
+						<th>Status</th>
+						<th>Message</th>
+						<th>Line</th>					
 					</tr>
 				</thead>
 				<tbody>
@@ -75,13 +72,14 @@
 				{foreach from=$papers item=row}				
 					<tr>
 						<td>{$cont}</td>
-						<td>{$row[0]}</td>
-						<td>{$row[1]}</td>
-						<td>{$row[2]}</td>
-						<td>{$row[3]}</td>
-						<td>{$row[4]}</td>
-						<td>{$row[5]}</td>
-						<td>{$row[6]}</td>
+						<td>{$row.title}</td>
+						{if $row.status == "ERROR"}
+							<td style="background-color: red; color: white;">{$row.status}</td>
+						{else}
+							<td style="background-color: green; color: white;">{$row.status}</td>
+						{/if}
+						<td>{$row.message}</td>
+						<td>{$row.line}</td>
 					</tr>	
 					{assign var=cont value=$cont+1}			
 				{/foreach}

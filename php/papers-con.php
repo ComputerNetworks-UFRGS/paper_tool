@@ -54,52 +54,106 @@ if($operation == 1){
 // Add paper by CSV
 if($operation == 2){
 
+	$fileTemplate = $_REQUEST['fileTemplate'];
+
 	$uploadfile = "/tmp/".$_FILES["csvfile"]["name"];
+	$error = 0;
+	$msg = '';
 	if (move_uploaded_file($_FILES['csvfile']['tmp_name'], $uploadfile)) {
 		$fp = fopen($uploadfile,"r+");
-		$line = trim(fgets($fp));
-		$error = 0;
-		$papers = array();
-		$conexao->StartTrans();
-		while($line = trim(fgets($fp))){
-			$arr = explode(";",$line);
-			if(count($arr) != 7){
-				$msg = 'Error processing the CSV file! Please, contact the system administrator.';
-				$error = 1;
-				$conexao->FailTrans();
-				break;
-			}
-			if(strlen($arr[1]) == 0){
-				$msg = 'Error processing the CSV file! Field year is empty for paper: ';
-				$msg.= '<br>"'.$arr[0].'".';
-				$error = 1;
-				$conexao->FailTrans();
-				break;		
-			}
-			if(strlen($arr[2]) == 0){
-				$arr[2] = 0;
-			}
-			$sSQL = "insert into papers (title,year,citations,venue,site,comments,file) values (?,?,?,?,?,?,?)";
-			if(!$conexao->Execute($sSQL,$arr)){
-				$msg = 'Error processing the CSV file! Please, contact the system administrator.';
-				$error = 1;
-				$conexao->FailTrans();
-				break;		
-			}
-			$papers[] = $arr;
+
+		// IEEE Xplore CSV
+		// [0] 	=> Title
+		// [3]  => Venue
+		// [5] 	=> Year 
+		// [13] => DOI
+		// [14] => PDF Link
+		// [15] => Author keywords
+		// [20] => Citation count
+		if($fileTemplate == 1){
+			$tmp = trim(fgets($fp));
+			$tmp = trim(fgets($fp));
+			$line = 3;
+			$c_papers = 0;
+			$papers = array();
+			while(($data = fgetcsv($fp,0,',','"')) !== FALSE){
+				
+				$papers[$c_papers]['title'] = $data[0];
+
+				if(!isset($data[0]) || strlen($data[0]) == 0){
+					$papers[$c_papers]['status'] = "ERROR";
+					$papers[$c_papers]['message'] = "This paper does not have title!";
+					$papers[$c_papers]['line'] = "Line: ".$line;
+					$line++;
+					$c_papers++;
+					continue;
+				}
+
+				if(!isset($data[5]) || strlen($data[5]) == 0){
+					$papers[$c_papers]['status'] = "ERROR";
+					$papers[$c_papers]['message'] = "This paper does not have year information!";
+					$papers[$c_papers]['line'] = "Line: ".$line;
+					$line++;
+					$c_papers++;
+					continue;
+				}
+
+				$sSQL = " select count(*) from papers where title ilike '%".$data[0]."%' ";
+				$sSQL.= " or doi ilike '%".$data[13]."%' ";
+				$count = $conexao->GetOne($sSQL);
+
+				if($count > 0){
+					$papers[$c_papers]['status'] = "ERROR";
+					$papers[$c_papers]['message'] = "This paper already exists in the database!";
+					$papers[$c_papers]['line'] = "Line: ".$line;
+				}
+				else{
+					$params = array();
+					$params[] = $data[0];
+					$params[] = $data[5];
+					$params[] = (int)($data[20]);
+					$params[] = $data[3];
+					$params[] = $data[13];
+					$params[] = $data[14];
+					$params[] = $data[15];
+
+					$sSQL = "insert into papers (title,year,citations,venue,doi,pdf_link,keywords) values (?,?,?,?,?,?,?)";
+					if(!$conexao->Execute($sSQL,$params)){
+						$papers[$c_papers]['status'] = "ERROR";
+						$papers[$c_papers]['message'] = "Error executing the insert query!";
+						$papers[$c_papers]['line'] = "Line: ".$line;
+					}
+					else{
+						$papers[$c_papers]['status'] = "SUCCESS";
+						$papers[$c_papers]['message'] = "Paper recored!";
+						$papers[$c_papers]['line'] = "Line: ".$line;
+					}
+				}
+
+				$line++;
+				$c_papers++;
+				
+			}	
 		}
+		$msg = 'File processed!';
 		fclose($fp);
-		if(!$error){
-			$conexao->CompleteTrans();
-			$msg = 'Success! CSV file processed.';
-		}
-		$conexao->Close();
-		$smarty->assign('error',$error);
-		$smarty->assign('msg',$msg);
-		$smarty->assign('papers',$papers);
-		$smarty->assign('operation',$operation);
-		$smarty->display('feedback.tpl');
 	}
+	else{
+		$error = 1;
+		$msg = 'Error to upload the file to the server! Please, contact the system administrator.';
+	}
+
+	//echo "<pre>";
+	//var_dump($papers);
+	//echo "</pre>";
+
+	$conexao->Close();
+	$smarty->assign('error',$error);
+	$smarty->assign('msg',$msg);
+	$smarty->assign('papers',$papers);
+	$smarty->assign('operation',$operation);
+	$smarty->display('feedback.tpl');
+	
 }
 
 // rating a paper
