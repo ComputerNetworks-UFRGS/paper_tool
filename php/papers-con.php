@@ -99,7 +99,7 @@ if($operation == 2){
 				}
 
 				$sSQL = " select count(*) from papers where title ilike '%".$data[0]."%' ";
-				$sSQL.= " or doi ilike '%".$data[13]."%' ";
+				$sSQL.= " and doi ilike '%".$data[13]."%' ";
 				$count = $conexao->GetOne($sSQL);
 
 				if($count > 0){
