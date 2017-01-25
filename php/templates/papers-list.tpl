@@ -53,15 +53,12 @@
 
 <hr class="divider"></hr>
 
-{assign var="open_box" value="1"}
-{assign var="cont" value="0"}
-
 <div id="yearSelect">
 	<form name="form" method="post" action="papers-list.php">
 	<div>
 		<label>Select the year</label>
 	   	<select class="chzn-select" name="year" onchange="document.form.submit();">
-			{html_options options=$years selected=$year}	
+			{html_options values=$years output=$years selected=$year}	
 	    </select>
 	</div>
 	</form>

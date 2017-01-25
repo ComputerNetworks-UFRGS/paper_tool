@@ -20,11 +20,14 @@ $smarty->assign('USERNAME',$_SESSION['username']);
 $conexao = ADONewConnection(DATABASE_DRIVER);
 $conexao->Connect(DATABASE_SERVER, DATABASE_USER, DATABASE_PASSWORD, DATABASE_NAME);
 
+$sSQL = "SELECT year from papers where active = 1 group by year order by year desc";
+$years = $conexao->GetCol($sSQL);
+
 if(isset($_REQUEST['year'])){
 	$year = $_REQUEST['year'];
 }
 else{
-	$year = date("Y") - 1;	
+	$year = $years[0];	
 }
 
 $sSQL = "SELECT id,name from taxonomies where active=1 order by name;";
@@ -64,11 +67,6 @@ for($i = 0; $i < $c1 ; $i++){
 
 }
 $smarty->assign('papers',$papers);
-
-$years = array();
-for($i = date("Y"); $i >= 1970; $i--){
-	$years[$i] = $i;
-}
 
 $smarty->assign('year',$year);
 $smarty->assign('years',$years);
