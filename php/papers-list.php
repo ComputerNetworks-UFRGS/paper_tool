@@ -18,14 +18,24 @@ $smarty->assign('SYS_TITLE',SYS_TITLE);
 $smarty->assign('USERNAME',$_SESSION['username']);
 
 $conexao = ADONewConnection(DATABASE_DRIVER);
-//$db->debug = true;
 $conexao->Connect(DATABASE_SERVER, DATABASE_USER, DATABASE_PASSWORD, DATABASE_NAME);
+
+if(isset($_REQUEST['year'])){
+	$year = $_REQUEST['year'];
+}
+else{
+	$year = date("Y") - 1;	
+}
 
 $sSQL = "SELECT id,name from taxonomies where active=1 order by name;";
 $taxonomies = $conexao->GetArray($sSQL);
 
-$sSQL = "SELECT * from papers where status=1 order by year desc, title asc;";
-$papers = $conexao->GetArray($sSQL);
+$param = array();
+$param[] = 1;
+$param[] = $year;
+
+$sSQL = "SELECT * from papers where status = ? and year = ? order by year desc, title asc;";
+$papers = $conexao->GetArray($sSQL,$param);
 
 $c1 = count($papers);
 $c2 = count($taxonomies);
@@ -53,8 +63,15 @@ for($i = 0; $i < $c1 ; $i++){
 	$papers[$i]['taxonomyColorCode'] = $taxonomyColorCode;
 
 }
-
 $smarty->assign('papers',$papers);
+
+$years = array();
+for($i = date("Y"); $i >= 1970; $i--){
+	$years[$i] = $i;
+}
+
+$smarty->assign('year',$year);
+$smarty->assign('years',$years);
 
 $smarty->display('papers-list.tpl');
 ?>

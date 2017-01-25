@@ -27,9 +27,10 @@ function formatOptions (option) {
   return $('<span><div class="'+$(ele).data("status")+'" style="display: inline-table;"></div> ' + option.text + '</span>');
 };
 
-function changeSelect2Border(tdElement,borderColor){
+function changeSelect2Border(tdElement,borderColor,width){
 	var div = $(tdElement).children('div').eq(0);
   	$(div).css('border','2px solid ' + borderColor);
+  	$(div).css('width', width + 'px');
 };
 
 $(document).ready(function() {
@@ -44,33 +45,37 @@ $(document).ready(function() {
 				"rating"	: rating
 
 			};
-			var request = $.ajax({
-  								type: "POST",
-  								url: "papers-con.php",
-  								data: data,
-  								dataType: "json"
-						  });
-			request.done(function(result){
-				if(result){
-					changeSelect2Border($("#colSelectsRatingID_"+ paperId),result);
-					alertify.success('Success! Paper ID # '+paperId+' was rated!');
-				}
-				else{
-					alertify.error('An error has occurred! Please, contact the system administrator.');
-				}
-			});
+		var request = $.ajax({
+								type: "POST",
+								url: "papers-con.php",
+								data: data,
+								dataType: "json"
+					  });
+		request.done(function(result){
+			if(result){
+				changeSelect2Border($("#colSelectsRatingID_"+ paperId),result);
+				alertify.success('Success! Paper ID # '+paperId+' was rated!');
+			}
+			else{
+				alertify.error('An error has occurred! Please, contact the system administrator.');
+			}
+		});
 	});
 
 	$('.selectsTaxonomies').select2({ formatResult: formatOptions });
 	$('.selectsTaxonomies').on("change",function(event) {
 		var paperId = $(this).data('paperid');
 		var taxonomyId = $(this).val();
-		$('#modal-form-taxonomy').modal({show : true});
-		var data = {
-				operation  : 20, // load taxonomy fields and the selected ones
-				paperId    : paperId,
-				taxonomyId : taxonomyId
-			};
+		if(taxonomyId == 0){
+			return;
+		}
+		else{
+			$('#modal-form-taxonomy').modal({show : true});
+			var data = {
+					operation  : 20, // load taxonomy fields and the selected ones
+					paperId    : paperId,
+					taxonomyId : taxonomyId
+				};
 			var request = $.ajax({
 							type: "POST",
 							url: "papers-con.php",
@@ -87,7 +92,7 @@ $(document).ready(function() {
 					alertify.error('An error has occurred! Please, contact the system administrator.');
 				}
 			});
-
+		}
 	});
 	
 	$('#btn-save-paper-taxonomy').click(function(){
@@ -225,12 +230,12 @@ $(document).ready(function() {
 	
 	$( "tbody tr td.colSelectsRating " ).each(function( index ) {
   		var borderColor = $(this).data('selectbordercolor');
-  		changeSelect2Border($(this),borderColor);
+  		changeSelect2Border($(this),borderColor,100);
 	});
 
 	$( "tbody tr td.colSelectsTaxonomies " ).each(function( index ) {
   		var borderColor = $(this).data('selectbordercolor');
-  		changeSelect2Border($(this),borderColor);
+  		changeSelect2Border($(this),borderColor,180);
 	});
 
 	$( "a.addComment" ).click(function(){

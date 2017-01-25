@@ -11,6 +11,7 @@ create table papers (
     comments text,
     file text,
     pdf_link text,
+    dl_link text,
     keywords text,
     doi      text,
     rating integer DEFAULT 0,

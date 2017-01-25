@@ -116,8 +116,9 @@ if($operation == 2){
 					$params[] = $data[13];
 					$params[] = $data[14];
 					$params[] = $data[15];
+					$params[] = "http://ieeexplore.ieee.org/document/";
 
-					$sSQL = "insert into papers (title,year,citations,venue,doi,pdf_link,keywords) values (?,?,?,?,?,?,?)";
+					$sSQL = "insert into papers (title,year,citations,venue,doi,pdf_link,keywords,dl_link) values (?,?,?,?,?,?,?,?)";
 					if(!$conexao->Execute($sSQL,$params)){
 						$papers[$c_papers]['status'] = "ERROR";
 						$papers[$c_papers]['message'] = "Error executing the insert query!";
