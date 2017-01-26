@@ -48,6 +48,7 @@
   			<label>Select the template below</label>
 	       	<select class="chzn-select" name="fileTemplate">
 				<option value="1">IEEEXplore CSV</option>
+				<option value="2">ACM Digital Library CSV</option>
 	        </select>  
 	    </div>
         <div>

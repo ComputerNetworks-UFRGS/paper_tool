@@ -5,6 +5,36 @@ require_once INCLUDE_SMARTY;
 require_once INCLUDE_ADODB;
 require_once INCLUDE_ADODB_ERROR;
 
+/* FUNCTIONS */
+
+// Return 1 if OK - O otherwise
+function validPaperTitle($title){
+	if(!isset($title) || strlen($title) == 0){
+		return 0;
+	}
+	return 1;
+}
+// Return 1 if OK - O otherwise
+function validPaperYear($year){
+	if(!isset($year) || strlen($year) == 0){
+		return 0;
+	}
+	return 1;
+}
+// Return 1 if OK - O otherwise
+function paperAlreadyExists($title,$doi,$conexao){	
+	$sSQL = " select count(*) from papers where title ilike '%".$title."%' ";
+	$sSQL.= " and doi ilike '%".$doi."%' ";
+	$count = $conexao->GetOne($sSQL);
+
+	if($count > 0){
+		return 1;
+	}
+	return 0;
+}
+/* FUNCTIONS */
+
+
 $smarty = new Smarty();
 
 $smarty->assign('IMAGES_PATH',IMAGES_PATH);
@@ -62,6 +92,7 @@ if($operation == 2){
 	if (move_uploaded_file($_FILES['csvfile']['tmp_name'], $uploadfile)) {
 		$fp = fopen($uploadfile,"r+");
 
+		// fileTemplate == 1
 		// IEEE Xplore CSV
 		// [0] 	=> Title
 		// [3]  => Venue
@@ -136,6 +167,70 @@ if($operation == 2){
 				
 			}	
 		}
+
+		// fileTemplate == 2
+		// ACM
+		// [6] 	=> Title
+		// [12] or [20] => Venue
+		// [18] => Year 
+		// [11] => DOI
+		// [1]  => "http://dl.acm.org/citation.cfm?id=" + ID
+		// [10] => Author keywords
+		// [??] => 0
+		elseif($fileTemplate == 2){
+			$tmp = trim(fgets($fp));
+			$line = 1;
+			$c_papers = 0;
+			$papers = array();
+			while(($data = fgetcsv($fp,0,',','"')) !== FALSE){
+
+				$line++;
+				$papers[$c_papers]['line'] = "Line: ".$line;
+				$papers[$c_papers]['title'] = $data[6];
+
+				if(!validPaperTitle($data[6])){
+					$papers[$c_papers]['status'] = "ERROR";
+					$papers[$c_papers++]['message'] = "This paper does not have title!";
+					continue;
+				}
+				if(!validPaperYear($data[18])){
+					$papers[$c_papers]['status'] = "ERROR";
+					$papers[$c_papers++]['message'] = "This paper does not have year information!";
+					continue;
+				}
+				if(paperAlreadyExists($data[6],$data[11],$conexao)){
+					$papers[$c_papers]['status'] = "ERROR";
+					$papers[$c_papers++]['message'] = "This paper already exists in the database!";
+					continue;	
+				}
+
+				$params = array();
+				$params[] = $data[6];
+				$params[] = $data[18];
+				$params[] = 0;
+				if(strlen($data[12]) > 0){
+					$params[] = $data[12];
+				}
+				else{
+					$params[] = $data[20];	
+				}
+				$params[] = $data[11];
+				$params[] = "http://dl.acm.org/citation.cfm?id=".$data[1];
+				$params[] = $data[10];
+				$params[] = "http://dl.acm.org/citation.cfm?id=";
+
+				$sSQL = "insert into papers (title,year,citations,venue,doi,pdf_link,keywords,dl_link) values (?,?,?,?,?,?,?,?)";
+				if(!$conexao->Execute($sSQL,$params)){
+					$papers[$c_papers]['status'] = "ERROR";
+					$papers[$c_papers++]['message'] = "Error executing the insert query!";
+				}
+				else{
+					$papers[$c_papers]['status'] = "SUCCESS";
+					$papers[$c_papers++]['message'] = "Paper recored!";
+				}
+
+			}
+		}
 		$msg = 'File processed!';
 		fclose($fp);
 	}
@@ -143,10 +238,6 @@ if($operation == 2){
 		$error = 1;
 		$msg = 'Error to upload the file to the server! Please, contact the system administrator.';
 	}
-
-	//echo "<pre>";
-	//var_dump($papers);
-	//echo "</pre>";
 
 	$conexao->Close();
 	$smarty->assign('error',$error);
