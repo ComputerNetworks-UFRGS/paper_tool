@@ -104,66 +104,50 @@ if($operation == 2){
 		if($fileTemplate == 1){
 			$tmp = trim(fgets($fp));
 			$tmp = trim(fgets($fp));
-			$line = 3;
+			$line = 2;
 			$c_papers = 0;
 			$papers = array();
 			while(($data = fgetcsv($fp,0,',','"')) !== FALSE){
 				
+				$line++;
+				$papers[$c_papers]['line'] = "Line: ".$line;
 				$papers[$c_papers]['title'] = $data[0];
 
-				if(!isset($data[0]) || strlen($data[0]) == 0){
+				if(!validPaperTitle($data[0])){
 					$papers[$c_papers]['status'] = "ERROR";
-					$papers[$c_papers]['message'] = "This paper does not have title!";
-					$papers[$c_papers]['line'] = "Line: ".$line;
-					$line++;
-					$c_papers++;
+					$papers[$c_papers++]['message'] = "This paper does not have title!";
 					continue;
 				}
-
-				if(!isset($data[5]) || strlen($data[5]) == 0){
+				if(!validPaperYear($data[5])){
 					$papers[$c_papers]['status'] = "ERROR";
-					$papers[$c_papers]['message'] = "This paper does not have year information!";
-					$papers[$c_papers]['line'] = "Line: ".$line;
-					$line++;
-					$c_papers++;
+					$papers[$c_papers++]['message'] = "This paper does not have year information!";
 					continue;
 				}
-
-				$sSQL = " select count(*) from papers where title ilike '%".$data[0]."%' ";
-				$sSQL.= " and doi ilike '%".$data[13]."%' ";
-				$count = $conexao->GetOne($sSQL);
-
-				if($count > 0){
+				if(paperAlreadyExists($data[0],$data[13],$conexao)){
 					$papers[$c_papers]['status'] = "ERROR";
-					$papers[$c_papers]['message'] = "This paper already exists in the database!";
-					$papers[$c_papers]['line'] = "Line: ".$line;
+					$papers[$c_papers++]['message'] = "This paper already exists in the database!";
+					continue;	
+				}
+
+				$params = array();
+				$params[] = $data[0];
+				$params[] = $data[5];
+				$params[] = (int)($data[20]);
+				$params[] = $data[3];
+				$params[] = $data[13];
+				$params[] = $data[14];
+				$params[] = $data[15];
+				$params[] = "http://ieeexplore.ieee.org/document/";
+
+				$sSQL = "insert into papers (title,year,citations,venue,doi,pdf_link,keywords,dl_link) values (?,?,?,?,?,?,?,?)";
+				if(!$conexao->Execute($sSQL,$params)){
+					$papers[$c_papers]['status'] = "ERROR";
+					$papers[$c_papers++]['message'] = "Error executing the insert query!";
 				}
 				else{
-					$params = array();
-					$params[] = $data[0];
-					$params[] = $data[5];
-					$params[] = (int)($data[20]);
-					$params[] = $data[3];
-					$params[] = $data[13];
-					$params[] = $data[14];
-					$params[] = $data[15];
-					$params[] = "http://ieeexplore.ieee.org/document/";
-
-					$sSQL = "insert into papers (title,year,citations,venue,doi,pdf_link,keywords,dl_link) values (?,?,?,?,?,?,?,?)";
-					if(!$conexao->Execute($sSQL,$params)){
-						$papers[$c_papers]['status'] = "ERROR";
-						$papers[$c_papers]['message'] = "Error executing the insert query!";
-						$papers[$c_papers]['line'] = "Line: ".$line;
-					}
-					else{
-						$papers[$c_papers]['status'] = "SUCCESS";
-						$papers[$c_papers]['message'] = "Paper recored!";
-						$papers[$c_papers]['line'] = "Line: ".$line;
-					}
+					$papers[$c_papers]['status'] = "SUCCESS";
+					$papers[$c_papers++]['message'] = "Paper recored!";
 				}
-
-				$line++;
-				$c_papers++;
 				
 			}	
 		}
