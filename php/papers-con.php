@@ -32,6 +32,28 @@ function paperAlreadyExists($title,$doi,$conexao){
 	}
 	return 0;
 }
+
+function storePaperTaxonomyFields($treeJson,$length,$paperId,$taxonomyId,$conexao){
+
+	for($i = 0; $i < $length; $i++){		
+		$isSelected = $treeJson[$i]['state']['selected'];
+		if($isSelected === "true"){
+			$params = array();
+			$params[] = $paperId;
+			$params[] = $taxonomyId;
+			$params[] = $treeJson[$i]['id'];
+			$sSQL = "INSERT INTO papers_taxonomies (paper_id,taxonomy_id,topic_id) VALUES (?,?,?);";
+			$conexao->Execute($sSQL,$params);
+		}
+		if(is_array($treeJson[$i]['children'])){
+			storePaperTaxonomyFields($treeJson[$i]['children'],
+						count($treeJson[$i]['children']),
+						$paperId,
+						$taxonomyId,
+						$conexao);			
+		}
+	}
+}
 /* FUNCTIONS */
 
 
@@ -293,6 +315,25 @@ if($operation == 12){
 	
 }
 
+// Remove paper
+if($operation == 13){
+
+	$params = array();
+	$params[] = $_REQUEST['paperId'];
+
+	$sSQL = " UPDATE papers SET status = 0 where id = ? ";
+	if($conexao->Execute($sSQL,$params)){
+		$params = array();
+		$params[] = $_REQUEST['year'];
+		
+		$sSQL = "SELECT count(*) from papers where status = 1 and year = ? ";
+		echo $conexao->GetOne($sSQL,$params);
+	}
+	else{
+		echo 0;
+	}	
+}
+
 // Load taxonomy
 if($operation == 20){
 
@@ -352,25 +393,4 @@ if($operation == 21){
 
 }
 
-function storePaperTaxonomyFields($treeJson,$length,$paperId,$taxonomyId,$conexao){
-
-	for($i = 0; $i < $length; $i++){		
-		$isSelected = $treeJson[$i]['state']['selected'];
-		if($isSelected === "true"){
-			$params = array();
-			$params[] = $paperId;
-			$params[] = $taxonomyId;
-			$params[] = $treeJson[$i]['id'];
-			$sSQL = "INSERT INTO papers_taxonomies (paper_id,taxonomy_id,topic_id) VALUES (?,?,?);";
-			$conexao->Execute($sSQL,$params);
-		}
-		if(is_array($treeJson[$i]['children'])){
-			storePaperTaxonomyFields($treeJson[$i]['children'],
-						count($treeJson[$i]['children']),
-						$paperId,
-						$taxonomyId,
-						$conexao);			
-		}
-	}
-}
 ?>

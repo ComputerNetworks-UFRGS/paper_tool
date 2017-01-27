@@ -172,61 +172,81 @@ $(document).ready(function() {
 				"operation" : 12, // load previous comments
 				"paperId" 	: paperId
 			};
-			var request = $.ajax({
-  								type: "POST",
-  								url: "papers-con.php",
-  								data: data,
-  								dataType: "json"
-						  });
-			request.done(function(result){
-				if(result){
-					var div = $("#previous-comments-body");
-					$(div).empty();
-					if(result == -1){
-						$(div).append($('<h3>')
-									  .css('color','#970000')
-									  .css('width','100%')
-									  .css('text-align','center')
-									  .text('No previous comments!')
-									 );
-					}
-					else{
-						var ul = $('<ul>').addClass('chat-box').addClass('timeline');
-						for(var i = 0; i < result.length; i++){
-							var li = $('<li>')
-									.addClass('gray')
-									.append($('<div>')
-											.addClass('info')
-											.append($('<span>')
-													.addClass('name')
-													.append('<span class="label label-green">COMMENT</span>')
-													.append('<strong class="indent"> '+result[i].user+' </strong> posted a comment')
-												   )
-											.append('<span class="time"><i class="icon-time"></i>'+result[i].time+'</span>')		 				   
-											)
-									.append('<div class="content"><blockquote>'+result[i].comment+'</blockquote></div>');
-							$(ul).append($(li));
-						}
-						$(div).append($(ul));
-					}
+		var request = $.ajax({
+								type: "POST",
+								url: "papers-con.php",
+								data: data,
+								dataType: "json"
+					  		});
+		request.done(function(result){
+			if(result){
+				var div = $("#previous-comments-body");
+				$(div).empty();
+				if(result == -1){
+					$(div).append($('<h3>')
+								  .css('color','#970000')
+								  .css('width','100%')
+								  .css('text-align','center')
+								  .text('No previous comments!')
+								 );
 				}
 				else{
-					alertify.error('An error has occurred! Please, contact the system administrator.');
+					var ul = $('<ul>').addClass('chat-box').addClass('timeline');
+					for(var i = 0; i < result.length; i++){
+						var li = $('<li>')
+								.addClass('gray')
+								.append($('<div>')
+										.addClass('info')
+										.append($('<span>')
+												.addClass('name')
+												.append('<span class="label label-green">COMMENT</span>')
+												.append('<strong class="indent"> '+result[i].user+' </strong> posted a comment')
+											   )
+										.append('<span class="time"><i class="icon-time"></i>'+result[i].time+'</span>')		 				   
+										)
+								.append('<div class="content"><blockquote>'+result[i].comment+'</blockquote></div>');
+						$(ul).append($(li));
+					}
+					$(div).append($(ul));
 				}
-			});
+			}
+			else{
+				alertify.error('An error has occurred! Please, contact the system administrator.');
+			}
+		});
 	});
 
-    /*
-	$('#withdraw-paper').click(function(){
+	$('.btnRemove').click(function(){
        
-		alertify.confirm("Are you sure? This action will remove this paper of the papers list. If you have some doubt regarding this action, please contact vtguimaraes@inf.ufrgs.br", function (e) {	
-		if(e){
-			document.getElementById("withdraw").submit();
-		}
+       	var paperId = $(this).data('paperid');
+       	var year = $('#selectYear').val();
+		alertify.confirm("Are you sure? This action will remove this paper of the papers list.", function (e) {	
+			if(e){
+				var data = {
+					"operation" : 13, // remove paper
+					"paperId" 	: paperId,
+					"year"		: year
+				};
+				var request = $.ajax({
+									type: "POST",
+									url: "papers-con.php",
+									data: data,
+									dataType: "json"
+						  		});
+				request.done(function(result){
+					if(result){
+						$('#trPaper_' + paperId).css('display','none');
+						$('.box-header').html('<h3>&nbsp;&nbsp;&nbsp;'+ year +' - [' + result + ' papers]</h3>');
+						alertify.success('Success! Paper ID #' + paperId + ' was removed.');
+					}
+					else{
+						alertify.error('An error has occurred! Please, contact the system administrator.');
+					}
+				});
+			}
 		});
   
     });
-    */
 	
 	$( "tbody tr td.colSelectsRating " ).each(function( index ) {
   		var borderColor = $(this).data('selectbordercolor');

@@ -57,7 +57,7 @@
 	<form name="form" method="post" action="papers-list.php">
 	<div>
 		<label>Select the year</label>
-	   	<select class="chzn-select" name="year" onchange="document.form.submit();">
+	   	<select class="chzn-select" id="selectYear" name="year" onchange="document.form.submit();">
 			{html_options values=$years output=$years selected=$year}	
 	    </select>
 	</div>
@@ -100,8 +100,10 @@
 
 			<tbody role="alert" aria-live="polite" aria-relevant="all">
 				{foreach from=$papers item=row}
-				<tr>
-					<td >{$row.id}</td>
+				<tr id="trPaper_{$row.id}">
+					<td style="text-align:center;">
+						<button class="btn btn-danger tip viewComments btnRemove" data-paperid="{$row.id}" data-original-title="Remove paper" title="Remove paper" >X</button>{$row.id}
+					</td>
     				<td >{$row.title}</td>
     				<td class="colSelectsRating" id="colSelectsRatingID_{$row.id}" style="text-align: center;" data-selectBorderColor="{$row.ratingColorCode}">
 						<select class="selectsRating" name="rate" data-paperid="{$row.id}">
