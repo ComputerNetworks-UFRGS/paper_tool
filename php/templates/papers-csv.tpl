@@ -49,6 +49,7 @@
 	       	<select class="chzn-select" name="fileTemplate">
 				<option value="1">IEEEXplore CSV</option>
 				<option value="2">ACM Digital Library CSV</option>
+				<option value="3">Elsevier CSV (Elsevier-Bibtex to CVS by JabRef)</option>
 	        </select>  
 	    </div>
         <div>

@@ -182,7 +182,7 @@ if($operation == 2){
 		// [11] => DOI
 		// [1]  => "http://dl.acm.org/citation.cfm?id=" + ID
 		// [10] => Author keywords
-		// [??] => 0
+		// [??] => 0 (citation)
 		elseif($fileTemplate == 2){
 			$tmp = trim(fgets($fp));
 			$line = 1;
@@ -237,6 +237,68 @@ if($operation == 2){
 
 			}
 		}
+		// fileTemplate == 3
+		// Elsevier Bibtex to CSV by JabRef
+		// [4] 	=> Title
+		// [14] => Venue
+		// [10] => Year 
+		// [??] => "" (DOI)
+		// [13] => "http:" + URL
+		// [28] => Author keywords
+		// [??] => 0 (citation)
+		elseif($fileTemplate == 3){
+			$tmp = trim(fgets($fp));
+			$line = 1;
+			$c_papers = 0;
+			$papers = array();
+			while(($data = fgetcsv($fp,0,',','"')) !== FALSE){
+
+				//echo "<pre>";
+				//var_dump($data);
+				//echo "</pre>";
+
+				$line++;
+				$papers[$c_papers]['line'] = "Line: ".$line;
+				$papers[$c_papers]['title'] = $data[4];
+
+				if(!validPaperTitle($data[4])){
+					$papers[$c_papers]['status'] = "ERROR";
+					$papers[$c_papers++]['message'] = "This paper does not have title!";
+					continue;
+				}
+				if(!validPaperYear($data[10])){
+					$papers[$c_papers]['status'] = "ERROR";
+					$papers[$c_papers++]['message'] = "This paper does not have year information!";
+					continue;
+				}
+				if(paperAlreadyExists($data[4]," ",$conexao)){
+					$papers[$c_papers]['status'] = "ERROR";
+					$papers[$c_papers++]['message'] = "This paper already exists in the database!";
+					continue;	
+				}
+
+				$params = array();
+				$params[] = $data[4];
+				$params[] = $data[10];
+				$params[] = 0;
+				$params[] = $data[14];				
+				$params[] = "";
+				$params[] = "http:".$data[13];
+				$params[] = $data[28];
+				$params[] = "";
+
+				$sSQL = "insert into papers (title,year,citations,venue,doi,pdf_link,keywords,dl_link) values (?,?,?,?,?,?,?,?)";
+				if(!$conexao->Execute($sSQL,$params)){
+					$papers[$c_papers]['status'] = "ERROR";
+					$papers[$c_papers++]['message'] = "Error executing the insert query!";
+				}
+				else{
+					$papers[$c_papers]['status'] = "SUCCESS";
+					$papers[$c_papers++]['message'] = "Paper recored!";
+				}
+			}
+		}
+
 		$msg = 'File processed!';
 		fclose($fp);
 	}
