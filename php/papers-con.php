@@ -22,9 +22,9 @@ function validPaperYear($year){
 	return 1;
 }
 // Return 1 if OK - O otherwise
-function paperAlreadyExists($title,$doi,$conexao){	
-	$sSQL = " select count(*) from papers where title ilike '%".$title."%' ";
-	$sSQL.= " and doi ilike '%".$doi."%' ";
+function paperAlreadyExists($title,$conexao){	
+
+	$sSQL = " select count(*) from papers where title ilike '%".pg_escape_string($title)."%' ";
 	$count = $conexao->GetOne($sSQL);
 
 	if($count > 0){
@@ -145,7 +145,7 @@ if($operation == 2){
 					$papers[$c_papers++]['message'] = "This paper does not have year information!";
 					continue;
 				}
-				if(paperAlreadyExists($data[0],$data[13],$conexao)){
+				if(paperAlreadyExists($data[0],$conexao)){
 					$papers[$c_papers]['status'] = "ERROR";
 					$papers[$c_papers++]['message'] = "This paper already exists in the database!";
 					continue;	
@@ -204,7 +204,7 @@ if($operation == 2){
 					$papers[$c_papers++]['message'] = "This paper does not have year information!";
 					continue;
 				}
-				if(paperAlreadyExists($data[6],$data[11],$conexao)){
+				if(paperAlreadyExists($data[6],$conexao)){
 					$papers[$c_papers]['status'] = "ERROR";
 					$papers[$c_papers++]['message'] = "This paper already exists in the database!";
 					continue;	
@@ -252,10 +252,10 @@ if($operation == 2){
 			$c_papers = 0;
 			$papers = array();
 			while(($data = fgetcsv($fp,0,',','"')) !== FALSE){
-
-				//echo "<pre>";
-				//var_dump($data);
-				//echo "</pre>";
+				// workaround for wrong lines where the year is shifted to next column
+				if((!is_integer($data[10])) && (count(explode("-",$data[10])) == 2)){
+					$data[10] = $data[11];
+				}
 
 				$line++;
 				$papers[$c_papers]['line'] = "Line: ".$line;
@@ -271,7 +271,7 @@ if($operation == 2){
 					$papers[$c_papers++]['message'] = "This paper does not have year information!";
 					continue;
 				}
-				if(paperAlreadyExists($data[4]," ",$conexao)){
+				if(paperAlreadyExists($data[4],$conexao)){
 					$papers[$c_papers]['status'] = "ERROR";
 					$papers[$c_papers++]['message'] = "This paper already exists in the database!";
 					continue;	
@@ -298,7 +298,6 @@ if($operation == 2){
 				}
 			}
 		}
-
 		$msg = 'File processed!';
 		fclose($fp);
 	}
