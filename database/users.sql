@@ -49,3 +49,7 @@ INSERT INTO users (username,password,email,active) VALUES
 -- xuz1chu4n
 INSERT INTO users (username,password,email,active) VALUES 
 				  ('zichuan', 'a61354ee2ef6e0b1a49d26d45e201e7d', 'z.xu@ucl.ac.uk', 1);				  				  
+
+-- s3rr4t
+INSERT INTO users (username,password,email,active) VALUES 
+				  ('joan', 'cd579e2ee11b340d800ea795bd65350f', 'serrat@tsc.upc.edu', 1);
