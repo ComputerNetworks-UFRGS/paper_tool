@@ -52,7 +52,7 @@
 </div>
 
 <h4 style="width: 95%; margin: auto; text-align:right">
-	Papers in the database: <span id="totalPapers" style="color: black">{$total_papers}</span>
+	Papers in the database: <span style="color: black">{$total_papers}</span>
 </h4>
 
 <div id="yearSelect">
@@ -70,11 +70,7 @@
 <hr class="divider"></hr>
 
 <div class="box">
-	{if $year != 0}
-    	<div class="box-header"><h3>&nbsp;&nbsp;&nbsp;{$year} - [{$papers|@count} papers]</h3></div>
-    {else}
-    	<div class="box-header"><h3>&nbsp;&nbsp;&nbsp;ALL - [{$papers|@count} papers]</h3></div>
-    {/if}
+    <div class="box-header"><h3>&nbsp;&nbsp;&nbsp;{$year} - [{$papers|@count} papers]</h3></div>
     <div class="box-content">
     	<!-- find me in partials/data_tables_custom -->
 		<table cellpadding="0" cellspacing="0" border="0" class="responsive dataTable">
@@ -114,9 +110,33 @@
 						<button class="btn btn-danger tip viewComments btnRemove" data-paperid="{$row.id}" data-original-title="Remove paper" title="Remove paper" >X</button>{$row.id}
 					</td>
     				<td >{$row.title}</td>
-    				<td id="colSelectsRatingID_{$row.id}" style="text-align: center;">
-						<select class="selectsRating {$row.ratingClass}" id="selectRating_ID_{$row.id}" name="rate" data-paperid="{$row.id}">
-							{html_options options=$ratingValues selected=$row.rating}
+    				<td class="colSelectsRating" id="colSelectsRatingID_{$row.id}" style="text-align: center;" data-selectBorderColor="{$row.ratingColorCode}">
+						<select class="selectsRating" name="rate" data-paperid="{$row.id}">
+							{if $row.rating == 0}
+								<option value="0" data-status="circlegray" selected>No rated</option>
+							{else}
+								<option value="0" data-status="circlegray">No rated</option>
+							{/if}
+							{if $row.rating == 1}
+								<option value="1" data-status="circlegreen" selected>Excelent</option>
+							{else}
+								<option value="1" data-status="circlegreen">Excelent</option>
+							{/if}
+							{if $row.rating == 2}
+								<option value="2" data-status="circleyellow" selected>Good</option>
+							{else}
+								<option value="2" data-status="circleyellow">Good</option>
+							{/if}
+							{if $row.rating == 3}
+								<option value="3" data-status="circleorange" selected>Average</option>
+							{else}
+								<option value="3" data-status="circleorange">Average</option>
+							{/if}
+							{if $row.rating == 4}
+								<option value="4" data-status="circlered" selected>Poor</option>
+							{else}
+								<option value="4" data-status="circlered">Poor</option>
+							{/if}
 						</select>
     				</td>
 					<td class="colSelectsTaxonomies" id="colSelectsTaxonomiesID_{$row.id}" data-selectBorderColor="{$row.taxonomyColorCode}" style="text-align: center;">

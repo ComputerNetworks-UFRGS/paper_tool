@@ -48,8 +48,7 @@ $taxonomies = $conexao->GetArray($sSQL);
 $c1 = count($papers);
 $c2 = count($taxonomies);
 for($i = 0; $i < $c1 ; $i++){
-	$papers[$i]['ratingColorCode'] = $ratingColors[$papers[$i]['rating']]['colorCode'];
-	$papers[$i]['ratingClass'] = $ratingColors[$papers[$i]['rating']]['class']; 
+	$papers[$i]['ratingColorCode'] = $ratingColors[$papers[$i]['rating']]['colorCode']; 
 
 	$str = '<option value="0" selected>Select here ...</option>';
 	$icon = $ratingColors[1]['class'];
@@ -83,8 +82,6 @@ $smarty->assign('years',$years);
 $sSQL = " SELECT year||' - '||count(year)||' paper(s)' as year ";
 $sSQL.= " from papers where active = 1 group by year order by year desc; ";
 $smarty->assign('years_output',$conexao->GetCol($sSQL));
-
-$smarty->assign('ratingValues', $ratingValues);
 
 $smarty->display('papers-list.tpl');
 ?>

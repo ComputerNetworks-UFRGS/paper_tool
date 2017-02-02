@@ -24,7 +24,7 @@ function validPaperYear($year){
 // Return 1 if OK - O otherwise
 function paperAlreadyExists($title,$conexao){	
 
-	$sSQL = " select count(*) from papers where title ilike '%".pg_escape_string($title)."%' ";
+	$sSQL = " select count(*) from papers where title = '".pg_escape_string($title)."' ";
 	$count = $conexao->GetOne($sSQL);
 
 	if($count > 0){
@@ -324,7 +324,8 @@ if($operation == 10){
 
 	$sSQL = "UPDATE papers SET rating = ? where id = ?;";
 	if($conexao->Execute($sSQL,$params)){
-		echo json_encode($ratingColors[$_REQUEST['rating']]['colorCode']);
+		echo json_encode($ratingColors[$_REQUEST['rating']]['class']);
+		//echo json_encode($ratingColors[$_REQUEST['rating']]['colorCode']);
 	}
 	else{
 		echo 0;
@@ -387,11 +388,17 @@ if($operation == 13){
 		$params = array();
 		$params[] = $_REQUEST['year'];
 		
-		$sSQL = "SELECT count(*) from papers where status = 1 and year = ? ";
-		echo $conexao->GetOne($sSQL,$params);
+		if($_REQUEST['year'] != 0){
+			$sSQL = "SELECT count(*) from papers where status = 1 and year = ? ";
+			echo $conexao->GetOne($sSQL,$params);
+		}
+		else{
+			$sSQL = "SELECT count(*) from papers where status = 1 ";
+			echo $conexao->GetOne($sSQL);	
+		}
 	}
 	else{
-		echo 0;
+		echo -1;
 	}	
 }
 

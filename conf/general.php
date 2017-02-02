@@ -1,7 +1,7 @@
 <?php
 
 // System DIR_NAME
-define("SYS_DIR_NAME","paper_tool");
+define("SYS_DIR_NAME","paper_tool_dev");
 
 // System PATH
 $_path = strstr(getcwd(),SYS_DIR_NAME,true);
@@ -26,7 +26,7 @@ define("DATABASE_DRIVER","postgres");
 define("DATABASE_SERVER","localhost");
 define("DATABASE_USER","tool");
 define("DATABASE_PASSWORD","tool");
-define("DATABASE_NAME","paper_tool");
+define("DATABASE_NAME","paper_tool_dev");
 
 // Misc PATHs
 
@@ -45,12 +45,19 @@ define("CSS_LIBS_PATH","../libs/css/");
 define("SCRIPTS_PATH_TODB","../scripts/dataToDB/");
 define("SCRIPTS_PATH_FROMCSV","../scripts/processCSV/");
 
+$ratingValues = array();
+$ratingValues[0] = "No rated";
+$ratingValues[1] = "Excelent";
+$ratingValues[2] = "Good";
+$ratingValues[3] = "Average";
+$ratingValues[4] = "Poor";
+
 $ratingColors = array();
-$ratingColors[0]['class'] = "circlegray";
-$ratingColors[1]['class'] = "circlegreen";
-$ratingColors[2]['class'] = "circleyellow";
-$ratingColors[3]['class'] = "circleorange";
-$ratingColors[4]['class'] = "circlered";
+$ratingColors[0]['class'] = "gray";
+$ratingColors[1]['class'] = "green";
+$ratingColors[2]['class'] = "yellow";
+$ratingColors[3]['class'] = "orange";
+$ratingColors[4]['class'] = "red";
 $ratingColors[0]['colorCode'] = "#c5c5c5";
 $ratingColors[1]['colorCode'] = "#8fc400";
 $ratingColors[2]['colorCode'] = "#ffeb3b";

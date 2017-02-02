@@ -160,29 +160,6 @@ margin: auto;
     background: #ff9800;
 }
 
-.gray {
-    background-color: #c5c5c5;
-}
-
-.green { 
-    color: white;
-    background-color: #8fc400;
-}
-
-.red {
-    color: white;
-    background-color: #cc0000;
-}
-
-.yellow {
-    background-color: #ffeb3b;
-}
-
-.orange {
-    color: white;
-    background-color: #ff9800;
-}
-
 .paper_info {
 	width: 95%;
 	margin: auto;	

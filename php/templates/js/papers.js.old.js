@@ -19,7 +19,7 @@ function loadJsTree(jsonData){
         });
 }
 
-/* function formatOptions (option) {
+function formatOptions (option) {
   var ele = option.element[0];
   if (!option.id) { 
   	return option.text; 
@@ -31,10 +31,11 @@ function changeSelect2Border(tdElement,borderColor,width){
 	var div = $(tdElement).children('div').eq(0);
   	$(div).css('border','2px solid ' + borderColor);
   	$(div).css('width', width + 'px');
-}; */
+};
 
 $(document).ready(function() {
 
+	$('.selectsRating').select2({ formatResult: formatOptions });
 	$('.selectsRating').on("change",function(event) {
 		var paperId = $(this).data('paperid');
 		var rating = $(this).val();
@@ -52,7 +53,7 @@ $(document).ready(function() {
 					  });
 		request.done(function(result){
 			if(result){
-				$('#selectRating_ID_' + paperId).removeClass().addClass('selectsRating ' + result);
+				changeSelect2Border($("#colSelectsRatingID_"+ paperId),result);
 				alertify.success('Success! Paper ID # '+paperId+' was rated!');
 			}
 			else{
@@ -61,7 +62,7 @@ $(document).ready(function() {
 		});
 	});
 
-	//$('.selectsTaxonomies').select2({ formatResult: formatOptions });
+	$('.selectsTaxonomies').select2({ formatResult: formatOptions });
 	$('.selectsTaxonomies').on("change",function(event) {
 		var paperId = $(this).data('paperid');
 		var taxonomyId = $(this).val();
@@ -233,14 +234,9 @@ $(document).ready(function() {
 									dataType: "json"
 						  		});
 				request.done(function(result){
-					if(result != -1){
+					if(result){
 						$('#trPaper_' + paperId).css('display','none');
-						if(year == 0){
-							$('.box-header').html('<h3>&nbsp;&nbsp;&nbsp;ALL - [' + result + ' papers]</h3>');
-						}
-						else{
-							$('.box-header').html('<h3>&nbsp;&nbsp;&nbsp;'+ year +' - [' + result + ' papers]</h3>');
-						}
+						$('.box-header').html('<h3>&nbsp;&nbsp;&nbsp;'+ year +' - [' + result + ' papers]</h3>');
 						alertify.success('Success! Paper ID #' + paperId + ' was removed.');
 					}
 					else{
@@ -252,7 +248,7 @@ $(document).ready(function() {
   
     });
 	
-	/* $( "tbody tr td.colSelectsRating " ).each(function( index ) {
+	$( "tbody tr td.colSelectsRating " ).each(function( index ) {
   		var borderColor = $(this).data('selectbordercolor');
   		changeSelect2Border($(this),borderColor,100);
 	});
@@ -260,7 +256,7 @@ $(document).ready(function() {
 	$( "tbody tr td.colSelectsTaxonomies " ).each(function( index ) {
   		var borderColor = $(this).data('selectbordercolor');
   		changeSelect2Border($(this),borderColor,180);
-	*/
+	});
 
 	$( "a.addComment" ).click(function(){
 		var paperId = $(this).data('paperid');
