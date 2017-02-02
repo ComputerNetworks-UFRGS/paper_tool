@@ -95,7 +95,9 @@ if($operation == 3){
 	$sequenceName = "taxonomy_".$_REQUEST['taxonomyId']."_fields_seq";
 
 	$sSQL = " SELECT id,CASE WHEN parent_id = 0 THEN '#' ELSE parent_id::text END as parent, ";
-	$sSQL.= " name as text from ".$tableName." where active = 1 order by parent_id,order_view;";
+	$sSQL.= " name||' | ['||(select count(*) from papers_taxonomies where topic_id = ".$tableName.".id and taxonomy_id = ".$_REQUEST['taxonomyId']." )||']' as text ";
+	$sSQL.= " from ".$tableName." where active = 1 order by parent_id,order_view;";
+
 	$taxoFields = $conexao->GetArray($sSQL);
 
 	$length = count($taxoFields);

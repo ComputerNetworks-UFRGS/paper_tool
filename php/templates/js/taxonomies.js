@@ -1,6 +1,9 @@
-function loadJsTree(jsonData){
-	$('#jstreeTaxonomy').jstree("destroy", true);
-	jsTree = $('#jstreeTaxonomy')
+function loadJsTree(jsonData,treeId,plugins){
+	console.log(jsonData);
+	console.log(treeId);
+	console.log(plugins);
+	$('#' + treeId).jstree("destroy", true);
+	jsTree = $('#' + treeId)
 		.jstree({
 			"core" : {
 				"animation" : 0,
@@ -9,12 +12,15 @@ function loadJsTree(jsonData){
 				"themes" : { "stripes" : true },
 				'data' : jsonData
 			},
-			"plugins" : [ "contextmenu", "dnd" , "wholerow" ]
-		});
+			"plugins" : plugins
+		})
+		.bind("loaded.jstree", function (event, data) {
+            $(this).jstree("open_all");
+        });
 }
 
-function createRootNode() {
-	$("#jstreeTaxonomy").jstree("create_node", null, "New Topic", "last", function (node) {
+function createRootNode(treeId) {
+	$('#' + treeId).jstree("create_node", null, "New Topic", "last", function (node) {
 		console.log(node);
         this.edit(node);
     });
@@ -33,6 +39,7 @@ $(function () {
 		}
 		else{
 			hideOption("editTaxonomyBox");
+			hideOption("viewTaxonomyBox");
 			var data = {
 				operation : 1, // add taxonomy
 				newTaxonomyName : $("#newTaxonomyName").val()
@@ -48,7 +55,7 @@ $(function () {
 					$("#addTaxonomyBtn").css('display','none');
 					$("#taxonomyId").val(result);
 					$("#newTaxonomyName").attr('readonly','readonly');
-					$("#container").css('display','block');
+					$("#containerAddEditTaxonomy").css('display','block');
 					alertify.success('Success! Taxonomy created!');
 					template = [
 								  { "id" : "topic_L1_1", "text" : "Topic 1", "type" : "root" },
@@ -56,7 +63,7 @@ $(function () {
 								  { "id" : "topic_L1_3", "text" : "Topic 3", "type" : "root" },
 								  { "id" : "topic_L1_4", "text" : "Topic 4", "type" : "root" }
 							   ];
-					loadJsTree(template);
+					loadJsTree(template,"jstreeTaxonomyAddEdit",[ "contextmenu", "dnd" , "wholerow" ]);
 				}
 				else{
 					alertify.error('An error has occurred! Please, contact the system administrator.');
@@ -85,8 +92,39 @@ $(function () {
 						  	});
 			request.done(function(result){
 				if(result){
-					$("#container").css('display','block');
-					loadJsTree(result);
+					$("#containerAddEditTaxonomy").css('display','block');
+					loadJsTree(result,"jstreeTaxonomyAddEdit",[ "contextmenu", "dnd" , "wholerow" ]);
+					alertify.success('Success! Fields loaded.');
+				}
+				else{
+					alertify.error('An error has occurred! Please, contact the system administrator.');
+				}
+			});
+		}
+	});
+
+	$("#viewTaxonomyBtn").click(function(){
+		if($("#viewTaxonomyId").val() == -1){
+			alertify.error('Please, select a taxonomy!');
+			return;
+		}
+		else{
+			$("#taxonomyId").val($("#viewTaxonomyId").val());
+			hideOption("addTaxonomyBox");
+			var data = {
+				operation : 3, // loading fields
+				taxonomyId : $("#taxonomyId").val(),
+			}
+			var request = $.ajax({
+							type: "POST",
+							url: "taxonomies-con.php",
+							data: data,
+							dataType: "json"
+						  	});
+			request.done(function(result){
+				if(result){
+					$("#containerViewTaxonomy").css('display','block');
+					loadJsTree(result,"jstreeTaxonomyView",[ "dnd" , "wholerow" ]);
 					alertify.success('Success! Fields loaded.');
 				}
 				else{
@@ -100,7 +138,7 @@ $(function () {
 		var data = {
 				operation : 2, // add new taxonomy fields
 				taxonomyId : $("#taxonomyId").val(),
-				treeJson : $("#jstreeTaxonomy").jstree("get_json")
+				treeJson : $("#jstreeTaxonomyAddEdit").jstree("get_json")
 			}
 		var request = $.ajax({
 							type: "POST",

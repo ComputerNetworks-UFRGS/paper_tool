@@ -61,19 +61,28 @@
 	<!-- <div id="editTaxonomyBox" style="float: left; width: 50%">
 		<label>Edit existing one</label>
 	    <select class="form-control" id="editTaxonomyId">
-	    	<option value="-1">Selecione aqui ...</option>
+	    	<option value="-1">Select here ...</option>
 	    	{html_options options=$taxonomies}
 	    </select>
 	    <br>
 		<button type="button" id="editTaxonomyBtn" class="btn btn-default">Edit Taxonomy</button>	
-	</div> -->
+	</div> --> 
+	<div id="viewTaxonomyBox" style="float: left; width: 50%">
+		<label>View existing one</label>
+	    <select class="form-control" id="viewTaxonomyId">
+	    	<option value="-1">Select here ...</option>
+	    	{html_options options=$taxonomies}
+	    </select>
+	    <br>
+		<button type="button" id="viewTaxonomyBtn" class="btn btn-default">View Taxonomy</button>	
+	</div>
 </div>
 
 <div style="clear: both;height: 30px;"></div>
 
-<div class="container" id="container" style="display: none;">
+<div class="container" id="containerAddEditTaxonomy" style="display: none;">
 	<div class="row">
-		<button type="button" class="btn btn-success" onclick="createRootNode();">Create Root Node</button>
+		<button type="button" class="btn btn-success" onclick="createRootNode('jstreeTaxonomyAddEdit');">Create Root Node</button>
 		<button type="button" id="saveTaxonomyBtn" class="btn btn-default">Save taxonomy fieds</button>
 		<!-- <button type="button" class="btn btn-warning" onclick="demo_rename();">Rename Field</button>
 		<button type="button" class="btn btn-danger" onclick="demo_delete();">Delete Field</button> -->
@@ -81,10 +90,22 @@
 	</div>
 	<div class="row">
 		<div class="col-3">
-			<div id="jstreeTaxonomy" class="demo" style="margin-top:1em; min-height:200px;"></div>
+			<div id="jstreeTaxonomyAddEdit" class="demo" style="margin-top:1em; min-height:200px;"></div>
 		</div>
 	</div>
 </div>
+
+<div class="container" id="containerViewTaxonomy" style="display: none;">
+	<div class="row">
+		<h5>The number within brackets shows the total of papers classified in the topic</h5>
+	</div>
+	<div class="row">
+		<div class="col-3">
+			<div id="jstreeTaxonomyView" class="demo" style="margin-top:1em; min-height:200px;"></div>
+		</div>
+	</div>
+</div>
+
 </form>
 </body>
 </html>
