@@ -58,7 +58,7 @@
 <div id="yearSelect">
 	<form name="form" method="post" action="papers-list.php">
 	<div>
-		<label>Select the year</label>
+		<label>Select year</label>
 	   	<select class="chzn-select" id="selectYear" name="year" onchange="document.form.submit();">
 	   		<option value="0">ALL</option>
 			{html_options values=$years output=$years_output selected=$year}	
@@ -119,8 +119,8 @@
 							{html_options options=$ratingValues selected=$row.rating}
 						</select>
     				</td>
-					<td class="colSelectsTaxonomies" id="colSelectsTaxonomiesID_{$row.id}" data-selectBorderColor="{$row.taxonomyColorCode}" style="text-align: center;">
-						<select class="selectsTaxonomies" name="taxonomies" data-paperid="{$row.id}">
+					<td class="colSelectsTaxonomies" id="colSelectsTaxonomiesID_{$row.id}" style="text-align: center;">
+						<select class="selectsTaxonomies {$row.taxonomyClass}" name="taxonomies" data-paperid="{$row.id}">
 							{$row.taxonomyOptions}
 						</select>
 					</td>
@@ -134,7 +134,7 @@
 					</td>
     				<td class="center ">{$row.citations}</td>
     				<td >{$row.venue}</td>
-    				<td class="center "><a href="{$row.pdf_link}" target="_blank"><i class="icon-external-link"></a></a></i></a></td>
+    				<td class="center "><a href="{$row.pdf_link}" target="_blank"><i class="icon-external-link"></i></a></td>
 				</tr>
 				{/foreach}
 			</tbody>

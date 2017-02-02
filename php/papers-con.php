@@ -383,23 +383,31 @@ if($operation == 13){
 	$params = array();
 	$params[] = $_REQUEST['paperId'];
 
-	$sSQL = " UPDATE papers SET status = 0 where id = ? ";
+	$sSQL = " UPDATE papers SET active = 0 where id = ? ";
+	$result = array();
+	$result['error'] = 0;
 	if($conexao->Execute($sSQL,$params)){
-		$params = array();
-		$params[] = $_REQUEST['year'];
 		
+		$sSQL = "SELECT count(*) from papers where active = 1 ";
+		$total_papers = $conexao->GetOne($sSQL);	
+
+		$result['total_papers_year'] = 0;
+		$result['total_papers'] = $total_papers;
+
 		if($_REQUEST['year'] != 0){
-			$sSQL = "SELECT count(*) from papers where status = 1 and year = ? ";
-			echo $conexao->GetOne($sSQL,$params);
+			$params = array();
+			$params[] = $_REQUEST['year'];
+			$sSQL = "SELECT count(*) from papers where active = 1 and year = ? ";
+			$result['total_papers_year'] = $conexao->GetOne($sSQL,$params);
 		}
 		else{
-			$sSQL = "SELECT count(*) from papers where status = 1 ";
-			echo $conexao->GetOne($sSQL);	
+			$result['total_papers_year'] = $total_papers;
 		}
 	}
 	else{
-		echo -1;
+		$result['error'] = 1;
 	}	
+	echo json_encode($result);
 }
 
 // Load taxonomy

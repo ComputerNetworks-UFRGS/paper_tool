@@ -19,20 +19,6 @@ function loadJsTree(jsonData){
         });
 }
 
-/* function formatOptions (option) {
-  var ele = option.element[0];
-  if (!option.id) { 
-  	return option.text; 
-  }
-  return $('<span><div class="'+$(ele).data("status")+'" style="display: inline-table;"></div> ' + option.text + '</span>');
-};
-
-function changeSelect2Border(tdElement,borderColor,width){
-	var div = $(tdElement).children('div').eq(0);
-  	$(div).css('border','2px solid ' + borderColor);
-  	$(div).css('width', width + 'px');
-}; */
-
 $(document).ready(function() {
 
 	$('.selectsRating').on("change",function(event) {
@@ -61,7 +47,6 @@ $(document).ready(function() {
 		});
 	});
 
-	//$('.selectsTaxonomies').select2({ formatResult: formatOptions });
 	$('.selectsTaxonomies').on("change",function(event) {
 		var paperId = $(this).data('paperid');
 		var taxonomyId = $(this).val();
@@ -133,20 +118,6 @@ $(document).ready(function() {
 
 	$('th[name=Man]').removeClass("sorting");
     $('th[name=Man]').removeAttr("aria-controls");
-
-    /*
-	$('#save-paper').click(function(){
-	
-		$.post("papers-con.php", $("#taxonomy-id").serialize() , function(r) {
-			console.log(r);
-			if(r)
-				alertify.success("OK! Taxonomy fields were saved!");
-			else
-				alertify.error("NOK! Some problem occurred. Please, try again.");
-		});				
-
-	});
-	*/
 
 	// add comment : operation 11
 	$('#btn-add-comment').click(function(){
@@ -233,14 +204,16 @@ $(document).ready(function() {
 									dataType: "json"
 						  		});
 				request.done(function(result){
-					if(result != -1){
+					console.log(result);
+					if(result.error == 0){
 						$('#trPaper_' + paperId).css('display','none');
 						if(year == 0){
-							$('.box-header').html('<h3>&nbsp;&nbsp;&nbsp;ALL - [' + result + ' papers]</h3>');
+							$('.box-header').html('<h3>&nbsp;&nbsp;&nbsp;ALL - [' + result.total_papers_year + ' papers]</h3>');
 						}
 						else{
-							$('.box-header').html('<h3>&nbsp;&nbsp;&nbsp;'+ year +' - [' + result + ' papers]</h3>');
+							$('.box-header').html('<h3>&nbsp;&nbsp;&nbsp;'+ year +' - [' + result.total_papers_year + ' papers]</h3>');
 						}
+						$('#totalPapers').html(result.total_papers);
 						alertify.success('Success! Paper ID #' + paperId + ' was removed.');
 					}
 					else{
@@ -251,16 +224,6 @@ $(document).ready(function() {
 		});
   
     });
-	
-	/* $( "tbody tr td.colSelectsRating " ).each(function( index ) {
-  		var borderColor = $(this).data('selectbordercolor');
-  		changeSelect2Border($(this),borderColor,100);
-	});
-
-	$( "tbody tr td.colSelectsTaxonomies " ).each(function( index ) {
-  		var borderColor = $(this).data('selectbordercolor');
-  		changeSelect2Border($(this),borderColor,180);
-	*/
 
 	$( "a.addComment" ).click(function(){
 		var paperId = $(this).data('paperid');

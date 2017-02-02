@@ -32,11 +32,11 @@ else{
 
 $param = array();
 if($year == 0){
-	$sSQL = "SELECT * from papers where status = ? order by year desc, title asc;";
+	$sSQL = "SELECT * from papers where active = ? order by year desc, title asc;";
 	$param[] = 1;
 }
 else{
-	$sSQL = "SELECT * from papers where status = ? and year = ? order by year desc, title asc;";	
+	$sSQL = "SELECT * from papers where active = ? and year = ? order by year desc, title asc;";	
 	$param[] = 1;
 	$param[] = $year;
 }
@@ -52,29 +52,26 @@ for($i = 0; $i < $c1 ; $i++){
 	$papers[$i]['ratingClass'] = $ratingColors[$papers[$i]['rating']]['class']; 
 
 	$str = '<option value="0" selected>Select here ...</option>';
-	$icon = $ratingColors[1]['class'];
-	$taxonomyColorCode = $ratingColors[1]['colorCode'];
+	$taxonomyClass = $ratingColors[1]['class'];
 	for($j = 0; $j < $c2 ; $j++){
 		$sSQL = " SELECT count(*) from papers_taxonomies where ";
 		$sSQL.= " paper_id = '".$papers[$i]['id']."' and taxonomy_id = '".$taxonomies[$j]['id']."';";
 		if($conexao->GetOne($sSQL) == 0){
-			$class = $icon = $ratingColors[4]['class'];
-			$taxonomyColorCode = $ratingColors[4]['colorCode'];
+			$taxonomyClass = $ratingColors[0]['class'];
+			$str.= '<option value="'.$taxonomies[$j]['id'].'" >[NOK] - '.$taxonomies[$j]['name'].'</option>';
 		}
 		else{
-			$class = $ratingColors[1]['class'];
-		}	
-		$str.= '<option value="'.$taxonomies[$j]['id'].'" data-status="'.$class.'">'.$taxonomies[$j]['name'].'</option>';
+			$str.= '<option value="'.$taxonomies[$j]['id'].'" >[OK] - '.$taxonomies[$j]['name'].'</option>';
+		}
 	}
 
 	$papers[$i]['taxonomyOptions'] = $str;
-	$papers[$i]['taxonomyIcon'] = $icon;
-	$papers[$i]['taxonomyColorCode'] = $taxonomyColorCode;
-
+	$papers[$i]['taxonomyClass'] = $taxonomyClass;
 }
+
 $smarty->assign('papers',$papers);
 
-$sSQL = " SELECT count(*) from papers where status = 1 ";
+$sSQL = " SELECT count(*) from papers where active = 1 ";
 $smarty->assign('total_papers',$conexao->GetOne($sSQL));
 
 $smarty->assign('year',$year);
