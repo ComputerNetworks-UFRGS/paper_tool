@@ -415,11 +415,16 @@ if($operation == 20){
 
 	$taxonomyTable = 'taxonomy_'.$_REQUEST['taxonomyId'].'_fields';
 
-	$sSQL = " SELECT id,CASE WHEN parent_id = 0 THEN '#' ELSE parent_id::text END as parent, ";
-	$sSQL.= " name||' | ['||(select count(*) from papers_taxonomies where topic_id = ".$taxonomyTable.".id and taxonomy_id = ".$_REQUEST['taxonomyId']." )||']' as text, "; 
-	$sSQL.= " CASE WHEN id in (SELECT topic_id from papers_taxonomies where ";
-	$sSQL.= " topic_id = ".$taxonomyTable.".id and paper_id = ".$_REQUEST['paperId']." and taxonomy_id = ".$_REQUEST['taxonomyId'].") THEN 1 ELSE 0 END as"; 
-	$sSQL.= " checked from ".$taxonomyTable." where active = 1 order by parent_id,order_view ";
+	$sSQL = " SELECT taxo.id,CASE WHEN taxo.parent_id = 0 THEN '#' ELSE taxo.parent_id::text END as parent, ";
+	$sSQL.= " CASE WHEN taxo.parent_id = 0 THEN name ||' | ['|| (select count(*) from ";
+	$sSQL.= " (select count(*) from papers_taxonomies where taxonomy_id = ".$_REQUEST['taxonomyId']." and topic_id ";
+	$sSQL.= " in (select id from ".$taxonomyTable." where parent_id = taxo.id) group by paper_id ) as count) || ']' ";
+	$sSQL.= " ELSE name||' | ['|| ";
+	$sSQL.= " (select count(*) from papers_taxonomies where topic_id = taxo.id and taxonomy_id = ".$_REQUEST['taxonomyId']." ) ";
+	$sSQL.= " ||']' END as text, ";
+	$sSQL.= " CASE WHEN taxo.id in (SELECT topic_id from papers_taxonomies where ";
+	$sSQL.= " topic_id = taxo.id and paper_id = ".$_REQUEST['paperId']." and taxonomy_id = ".$_REQUEST['taxonomyId']." ) ";
+	$sSQL.= " THEN 1 ELSE 0 END as checked from ".$taxonomyTable." as taxo where taxo.active = 1 order by taxo.parent_id,taxo.order_view ";
 	$taxoFields = $conexao->GetArray($sSQL);
 
 	$length = count($taxoFields);
