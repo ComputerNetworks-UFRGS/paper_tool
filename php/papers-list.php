@@ -48,6 +48,10 @@ $taxonomies = $conexao->GetArray($sSQL);
 $c1 = count($papers);
 $c2 = count($taxonomies);
 for($i = 0; $i < $c1 ; $i++){
+	if(empty($papers[$i]['pdf_link'])){
+		$papers[$i]['pdf_link'] = "../papers/".$papers[$i]['file'];
+	}
+
 	$papers[$i]['ratingColorCode'] = $ratingColors[$papers[$i]['rating']]['colorCode'];
 	$papers[$i]['ratingClass'] = $ratingColors[$papers[$i]['rating']]['class']; 
 

@@ -111,7 +111,8 @@
 				{foreach from=$papers item=row}
 				<tr id="trPaper_{$row.id}">
 					<td style="text-align:center;">
-						<button class="btn btn-danger tip viewComments btnRemove" data-paperid="{$row.id}" data-original-title="Remove paper" title="Remove paper" >X</button>{$row.id}
+						<button class="btn btn-danger tip viewComments btnRemove" data-paperid="{$row.id}" data-original-title="Remove paper" title="Remove paper" >X</button>
+						<div>{$row.id}</div>
 					</td>
     				<td >{$row.title}</td>
     				<td id="colSelectsRatingID_{$row.id}" style="text-align: center;">
