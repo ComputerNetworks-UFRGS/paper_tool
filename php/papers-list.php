@@ -20,6 +20,10 @@ $smarty->assign('USERNAME',$_SESSION['username']);
 $conexao = ADONewConnection(DATABASE_DRIVER);
 $conexao->Connect(DATABASE_SERVER, DATABASE_USER, DATABASE_PASSWORD, DATABASE_NAME);
 
+$sSQL = " SELECT id,username from users where active = 1 and id not in (1) order by username ";
+$users = $conexao->GetAssoc($sSQL);
+$smarty->assign('users',$users);
+
 $sSQL = " SELECT year from papers where active = 1 group by year order by year desc ";
 $years = $conexao->GetCol($sSQL);
 
@@ -48,6 +52,14 @@ $taxonomies = $conexao->GetArray($sSQL);
 $c1 = count($papers);
 $c2 = count($taxonomies);
 for($i = 0; $i < $c1 ; $i++){
+	if(empty($papers[$i]['assigned_to'])){
+		$papers[$i]['assignedToUser'] = '--';
+	}
+	else{
+		$sSQL = "SELECT username from users where id = ".$papers[$i]['assigned_to'];
+		$papers[$i]['assignedToUser'] = $conexao->GetOne($sSQL);	
+	}
+
 	if(empty($papers[$i]['pdf_link'])){
 		$papers[$i]['pdf_link'] = "../papers/".$papers[$i]['file'];
 	}

@@ -20,12 +20,14 @@ create table papers (
     same_as integer,
     bibtex text,
     upload_by integer,
+    assigned_to integer,
     active smallint DEFAULT 1
 );
 
 ALTER TABLE public.papers OWNER TO tool;
 ALTER TABLE ONLY papers ADD CONSTRAINT papers_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY papers ADD CONSTRAINT user_fkey FOREIGN KEY (upload_by) REFERENCES users (id);
+ALTER TABLE ONLY papers ADD CONSTRAINT user_assigned_fkey FOREIGN KEY (assigned_to) REFERENCES users (id);
 
 create sequence papers_comments_seq;
 create table papers_comments (

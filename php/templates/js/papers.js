@@ -230,5 +230,61 @@ $(document).ready(function() {
 		$( "#paper_id_comment" ).val(paperId);
 	});	
 
+	$('#selectUsers').on("change",function(event) {
+		var userId = $(this).val();
+		if($('.checkbox:checked').length == 0){
+			alertify.error('Select one row at least, please.');
+			return;
+		}
+		else if (userId == -1){
+			alertify.error('Select an user, please.');
+			return;
+		}
+		else{
+			var data = {
+					'operation'  : 14, // assign an user to paper(s)
+					'userId'     : userId,
+					'paperIds[]' : []
+					};
+			$('input[name="assignedPapers[]"]:checked').each(function() {
+  				data['paperIds[]'].push($(this).val());
+			});
+			var request = $.ajax({
+							type: "POST",
+							url: "papers-con.php",
+							data: data,
+							dataType: "json"
+						  	});
+			request.done(function(result){
+				if(result.error){
+					var msg = 'Error to record the following papers: ';
+					for(var i = 0; i < result.paperIds.length ; i++){
+						msg+= result.paperIds[i] + ' |';
+					}
+					alertify.error(msg);
+				}
+				else{
+					alertify.success('Success! Fields recorded! Waiting the page reload.');
+					setTimeout(function () { location.reload(1); }, 1000);
+				}
+			});
+		}
+	});
+
+	// START --- Select all checkboxes
+	$("#selectAll").change(function(){  //"select all" change 
+	    $(".checkbox").prop('checked', $(this).prop("checked")); //change all ".checkbox" checked status
+	});
+
+	$('.checkbox').change(function(){ 
+	    if(false == $(this).prop("checked")){ //if this item is unchecked
+	        $("#selectAll").prop('checked', false); //change "select all" checked status to false
+	    }
+	    if ($('.checkbox:checked').length == $('.checkbox').length ){
+	        $("#selectAll").prop('checked', true);
+	    }
+	});
+	// END ---- Select all checkboxes
+
 });
 

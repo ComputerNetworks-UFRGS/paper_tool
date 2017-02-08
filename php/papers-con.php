@@ -410,6 +410,32 @@ if($operation == 13){
 	echo json_encode($result);
 }
 
+// Assign an user to paper(s)
+if($operation == 14){
+
+	$result['error'] = 0;
+	$aux = 0;
+
+	if($_REQUEST['userId'] == 0){
+		$userId = null;
+	}
+	else{
+		$userId = $_REQUEST['userId'];	
+	}
+
+	for($i = 0; $i < count($_REQUEST['paperIds']); $i++){
+		$params = array();
+		$params[] = $userId;
+		$params[] = $_REQUEST['paperIds'][$i];
+		$sSQL = "UPDATE papers SET assigned_to = ? where id = ? ";
+		if(!$conexao->Execute($sSQL,$params)){
+			$result['error'] = 1;
+			$result['paperIds'][$aux++] = $_REQUEST['paperIds'][$i];
+		}
+	}
+	echo json_encode($result);
+}
+
 // Load taxonomy
 if($operation == 20){
 

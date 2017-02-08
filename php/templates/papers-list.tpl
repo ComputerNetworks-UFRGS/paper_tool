@@ -55,13 +55,23 @@
 	Papers in the database: <span id="totalPapers" style="color: black">{$total_papers}</span>
 </h4>
 
+<hr class="divider"></hr>
+
 <div id="yearSelect">
 	<form name="form" method="post" action="papers-list.php">
-	<div>
+	<div style="width: 50%; float: left;">
 		<label>Select year</label>
 	   	<select class="chzn-select" id="selectYear" name="year" onchange="document.form.submit();">
 	   		<option value="0">ALL</option>
 			{html_options values=$years output=$years_output selected=$year}	
+	    </select>
+	</div>
+	<div style="text-align: right">
+		<label>Select an user to assign papers</label>
+	   	<select class="chzn-select" id="selectUsers" name="users">	   		
+	   		<option value="-1">Select here ...</option>
+	   		<option value="0">NOBODY</option>
+			{html_options options=$users}	
 	    </select>
 	</div>
 	</form>
@@ -104,6 +114,13 @@
 					<th name="preview" tabindex="0" rowspan="1" colspan="1">
                         <div>PDF Link</div>
                     </th>
+                    <th name="assignedToUser" tabindex="0" rowspan="1" colspan="1">
+						<div>Assigned To</div>
+                    </th>
+                    <th name="assignedToUserCheck" tabindex="0" rowspan="1" colspan="1">
+                    	ALL
+                    	<input type="checkbox" name="selectAll" id="selectAll">
+                    </th>
 				</tr>
 			</thead>
 
@@ -135,14 +152,21 @@
 					</td>
     				<td class="center ">{$row.citations}</td>
     				<td >{$row.venue}</td>
-    				<td class="center "><a href="{$row.pdf_link}" target="_blank"><i class="icon-external-link"></i></a></td>
+    				<td class="center">
+    					<a href="{$row.pdf_link}" target="_blank"><i class="icon-external-link"></i></a>
+    				</td>
+    				<td class="center">
+    					{$row.assignedToUser}
+    				</td>
+    				<td class="center">
+    					<input type="checkbox" class="checkbox" name="assignedPapers[]" value="{$row.id}">
+    				</td>
 				</tr>
 				{/foreach}
 			</tbody>
 			</table>   	
 	</div>
 </div>
-
 
 {include file="paper_add_comment.tpl"}
 {include file="paper_previous_comment.tpl"}
