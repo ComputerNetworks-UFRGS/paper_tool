@@ -48,4 +48,14 @@ INSERT INTO users (username,password,email,active) VALUES
 				  ('stuart', 'ae2b43c35c2c717cec7478cd9692b7f3', 's.clayman@ucl.ac.uk', 1);
 -- xuz1chu4n
 INSERT INTO users (username,password,email,active) VALUES 
-				  ('zichuan', 'a61354ee2ef6e0b1a49d26d45e201e7d', 'z.xu@ucl.ac.uk', 1);				  				  
+				  ('zichuan', 'a61354ee2ef6e0b1a49d26d45e201e7d', 'z.xu@ucl.ac.uk', 1);
+-- ch4r4l4mb1d3s
+INSERT INTO users (username,password,email,active) VALUES 
+				  ('charalambides', '4965f335fbb2ae9b02caeb535fbcbbba', 'marinos.charalambides@ucl.ac.uk', 1);
+-- tunc3r
+INSERT INTO users (username,password,email,active) VALUES 
+				  ('tuncer', '163a9594c4bc21886842e935b4edcea5', 'd.tuncer@ucl.ac.uk', 1);
+-- m4m4t4s
+INSERT INTO users (username,password,email,active) VALUES 
+				  ('mamatas', 'ae3178bcb68fd7d1ffacc99062dc521d', 'emamatas@uom.edu.gr', 1);
+				  
