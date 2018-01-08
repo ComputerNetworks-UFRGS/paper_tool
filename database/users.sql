@@ -53,3 +53,19 @@ INSERT INTO users (username,password,email,active) VALUES
 -- s3rr4t
 INSERT INTO users (username,password,email,active) VALUES 
 				  ('joan', 'cd579e2ee11b340d800ea795bd65350f', 'serrat@tsc.upc.edu', 1);
+
+-- m4rcusbr1t0
+INSERT INTO users (username,password,email,active) VALUES 
+				  ('marcus', 'da03aa8d26a48be9d4cc83b773ed05a1', 'marcus.silva@inf.ufrgs.br', 1);
+
+-- ch4r4l4mb1d3s
+INSERT INTO users (username,password,email,active) VALUES 
+				  ('charalambides', '4965f335fbb2ae9b02caeb535fbcbbba', 'marinos.charalambides@ucl.ac.uk', 1);
+
+-- tunc3r
+INSERT INTO users (username,password,email,active) VALUES 
+				  ('tuncer', '163a9594c4bc21886842e935b4edcea5', 'd.tuncer@ucl.ac.uk', 1);
+
+-- m4m4t4s
+INSERT INTO users (username,password,email,active) VALUES 
+				  ('mamatas', 'ae3178bcb68fd7d1ffacc99062dc521d', 'emamatas@uom.edu.gr', 1);
