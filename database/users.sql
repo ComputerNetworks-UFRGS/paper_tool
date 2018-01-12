@@ -69,3 +69,11 @@ INSERT INTO users (username,password,email,active) VALUES
 -- m4m4t4s
 INSERT INTO users (username,password,email,active) VALUES 
 				  ('mamatas', 'ae3178bcb68fd7d1ffacc99062dc521d', 'emamatas@uom.edu.gr', 1);
+
+-- th30d0r0u
+INSERT INTO users (username,password,email,active) VALUES 
+				  ('theodorou', '28a7d537ed61b649c97bade8ecaa8d6f', 'tryfonthe@gmail.com', 1);
+
+-- v10l3tt4s
+INSERT INTO users (username,password,email,active) VALUES 
+				  ('violettas', 'f66024fce42b11e81cf5605d8715107f', 'georgevio@gmail.com', 1);				
