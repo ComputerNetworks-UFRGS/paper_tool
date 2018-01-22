@@ -106,7 +106,7 @@
                         <div>Comments</div>
                     </th>
 					<th role="columnheader" tabindex="0" rowspan="1" colspan="1">
-						<div>Citations</div>
+						<div>Questions</div>
 					</th>
 					<th role="columnheader" tabindex="0" rowspan="1" colspan="1">
 						<div>Venue</div>
@@ -150,7 +150,15 @@
 								<i class="icon-comments-alt"></i>
 						</a>	
 					</td>
-    				<td class="center ">{$row.citations}</td>
+    				<td class="center ">
+    					<a class="a-menu tip addAnswer" data-paperid="{$row.id}" title="Answer" data-toggle="modal" href="#modal-form-add-answer" data-original-title="Answer">
+								<button style="width: 8em; background-color: lightblue;">Answer</button>
+						</a>
+						<div style="height: 0.5em"></div>
+						<a class="a-menu tip viewAnswers" data-paperid="{$row.id}" title="View Answers" data-toggle="modal" href="#modal-form-view-answers" data-original-title="View Answers">
+								<button style="width: 8em; background-color: bisque;">View Answers</button>
+						</a>
+    				</td>
     				<td >{$row.venue}</td>
     				<td class="center">
     					<a href="{$row.pdf_link}" target="_blank"><i class="icon-external-link"></i></a>
@@ -169,6 +177,8 @@
 </div>
 
 {include file="paper_add_comment.tpl"}
+{include file="paper_add_answer.tpl"}
+{include file="paper_view_answers.tpl"}
 {include file="paper_previous_comment.tpl"}
 {include file="paper_taxonomy.tpl"}
 
