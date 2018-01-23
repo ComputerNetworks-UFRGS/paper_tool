@@ -151,13 +151,14 @@
 						</a>	
 					</td>
     				<td class="center ">
-    					<a class="a-menu tip addAnswer" data-paperid="{$row.id}" title="Answer" data-toggle="modal" href="#modal-form-add-answer" data-original-title="Answer">
-								<button style="width: 8em; background-color: lightblue;">Answer</button>
-						</a>
-						<div style="height: 0.5em"></div>
-						<a class="a-menu tip viewAnswers" data-paperid="{$row.id}" title="View Answers" data-toggle="modal" href="#modal-form-view-answers" data-original-title="View Answers">
-								<button style="width: 8em; background-color: bisque;">View Answers</button>
-						</a>
+    					<form method="post" action="paper-add-answer.php">
+    						<input type="hidden" name="paper_id" value="{$row.id}">    						
+							<button style="width: 8em; background-color: lightblue;">Answer</button>
+						</form>				
+						<form method="post" action="#">
+							<div style="height: 0.5em"></div>
+							<button style="width: 8em; background-color: bisque;">View Answers</button>
+						</form>
     				</td>
     				<td >{$row.venue}</td>
     				<td class="center">
@@ -177,8 +178,6 @@
 </div>
 
 {include file="paper_add_comment.tpl"}
-{include file="paper_add_answer.tpl"}
-{include file="paper_view_answers.tpl"}
 {include file="paper_previous_comment.tpl"}
 {include file="paper_taxonomy.tpl"}
 

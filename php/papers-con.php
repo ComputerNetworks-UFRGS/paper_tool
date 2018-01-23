@@ -518,4 +518,23 @@ if($operation == 21){
 
 }
 
+// Answer important questions
+if($operation == 30){
+
+	$userId = $_SESSION['userid'];
+	$paperId = $_REQUEST['paperId'];
+	
+	$sSQL = "delete from papers_users_answers where user_id = ? and paper_id = ? ";
+	$conexao->Execute($sSQL,array($userId,$paperId));
+
+	for ($i=0; $i < count($_REQUEST["questionId"]); $i++) { 
+		$sSQL = " insert into papers_users_answers (answer,question_id,user_id,paper_id) ";
+		$sSQL.= " values ('".$_REQUEST["answer"][$i]."',".$_REQUEST["questionId"][$i].",$userId,$paperId) ";
+		echo $sSQL;
+		echo $conexao->Execute($sSQL); //,array($_REQUEST["answer"][$i],$_REQUEST["questionId"][$i],$userId,$paperId));
+	}
+
+	echo 1;
+}
+
 ?>
