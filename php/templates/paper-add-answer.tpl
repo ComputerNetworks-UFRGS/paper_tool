@@ -45,6 +45,9 @@
 			<h4>Venue: {$paper[0].venue}</h4>
 			<h4>Year: {$paper[0].year}</h4>
 		</div>
+		<div style="text-align: right;">
+			Click <a href="papers-list.php" style="color: darkred;text-decoration: underline;">here</a> to return to the papers list.
+		</div>
 		<hr>
     	<form name="form" class="form-horizontal fill-up separate-sections" method="post" action="papers-con.php">
 			<input type="hidden" value="30" name="operation"/>

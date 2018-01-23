@@ -88,5 +88,16 @@
 		{/if}
 	{/if}
 
+	{if $operation == 30}
+		{if $error}
+			<h1 class="feedback" style="color:red;">{$msg}</h1>
+		{else}
+			<h1 class="feedback">{$msg}</h1>
+			<div style="text-align: center; font-size: 16px; margin-top: 20px;">
+				Click <a href="papers-list.php" style="color: darkred;text-decoration: underline;">here</a> to return to the papers list.
+			</div>
+		{/if}
+	{/if}
+
 </body>
 </html>

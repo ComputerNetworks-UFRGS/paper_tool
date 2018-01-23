@@ -1,5 +1,6 @@
 
 create sequence questions_seq;
+alter sequence public.questions_seq OWNER TO tool;
 create table questions (
     id integer DEFAULT nextval('questions_seq'::regclass) NOT NULL,
     question text,
@@ -18,6 +19,7 @@ insert into questions (question,created_by) values ('Did you recommend this pape
 insert into questions (question,created_by) values ('What are the main topics of the paper?',1);
 
 create sequence papers_users_answers_seq;
+alter sequence public.papers_users_answers_seq OWNER TO tool;
 create table papers_users_answers (
     id          integer NOT NULL DEFAULT nextval('papers_users_answers_seq'),
     answer      text,

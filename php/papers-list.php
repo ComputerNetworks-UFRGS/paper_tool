@@ -83,6 +83,11 @@ for($i = 0; $i < $c1 ; $i++){
 
 	$papers[$i]['taxonomyOptions'] = $str;
 	$papers[$i]['taxonomyClass'] = $taxonomyClass;
+
+	$sSQL = "select count(*) from papers_users_answers where paper_id = ? and user_id = ? ";
+	$hasUserAnswer = $conexao->GetOne($sSQL,array($papers[$i]['id'],$_SESSION["userid"]));
+
+	$papers[$i]['hasUserAnswer'] = $hasUserAnswer;
 }
 
 $smarty->assign('papers',$papers);

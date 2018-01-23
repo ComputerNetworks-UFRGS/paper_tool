@@ -152,12 +152,16 @@
 					</td>
     				<td class="center ">
     					<form method="post" action="paper-add-answer.php">
-    						<input type="hidden" name="paper_id" value="{$row.id}">    						
-							<button style="width: 8em; background-color: lightblue;">Answer</button>
+    						<input type="hidden" name="paper_id" value="{$row.id}">   
+    						{if not {$row.hasUserAnswer}} 						
+								<button style="width: 8em; background-color: lightgray;">Answer</button>
+							{else}
+								<button style="width: 8em; background-color: lightgreen;">Answer</button>
+							{/if}
 						</form>				
 						<form method="post" action="#">
 							<div style="height: 0.5em"></div>
-							<button style="width: 8em; background-color: bisque;">View Answers</button>
+							<button style="width: 8em; background-color: lightgray;">View Answers</button>
 						</form>
     				</td>
     				<td >{$row.venue}</td>
