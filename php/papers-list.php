@@ -88,6 +88,11 @@ for($i = 0; $i < $c1 ; $i++){
 	$hasUserAnswer = $conexao->GetOne($sSQL,array($papers[$i]['id'],$_SESSION["userid"]));
 
 	$papers[$i]['hasUserAnswer'] = $hasUserAnswer;
+
+	$sSQL = "select count(*) from papers_users_answers where paper_id = ? ";
+	$haveAnswers = $conexao->GetOne($sSQL,array($papers[$i]['id']));
+
+	$papers[$i]['haveAnswers'] = $haveAnswers;
 }
 
 $smarty->assign('papers',$papers);

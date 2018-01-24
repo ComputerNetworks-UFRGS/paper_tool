@@ -159,9 +159,14 @@
 								<button style="width: 8em; background-color: lightgreen;">Answer</button>
 							{/if}
 						</form>				
-						<form method="post" action="#">
-							<div style="height: 0.5em"></div>
-							<button style="width: 8em; background-color: lightgray;">View Answers</button>
+						<div style="height: 0.5em"></div>
+						<form method="post" action="paper-view-answers.php">
+							<input type="hidden" name="paper_id" value="{$row.id}">
+							{if not {$row.haveAnswers}}
+								<button style="width: 8em; background-color: lightgray;">View Answers</button>
+							{else}
+								<button style="width: 8em; background-color: lightgreen;">View Answers</button>
+							{/if}
 						</form>
     				</td>
     				<td >{$row.venue}</td>

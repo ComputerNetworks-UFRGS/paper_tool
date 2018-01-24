@@ -32,10 +32,10 @@
 	<div class="pull-left header">
     	<h3 class="title">
             <i class="icon-file"></i>
-            Answer
+            Answers
       	</h3>
         <h5>
-       		Answer important questions about the paper
+       		Answers for important questions about the paper
 	</h5>
   	</div>
 </div>
@@ -48,23 +48,25 @@
 		<div style="text-align: right;">
 			Click <a href="papers-list.php" style="color: darkred;text-decoration: underline;">here</a> to return to the papers list.
 		</div>
-		<hr>
-    	<form name="form" class="form-horizontal fill-up separate-sections" method="post" action="papers-con.php">
-			<input type="hidden" value="30" name="operation"/>
-			<input type="hidden" value="{$paper[0].id}" name="paperId"/>
-			{foreach from=$questions item=row}
-				<div>
-					<div style="font-size: 12pt;color: black;background-color: #f8ffda;padding: 10px;border: 1px solid #b3b300;font-weight: 600;">
-						Question: {$row.question}
+		<hr>	
+		{foreach from=$questions item=row}
+			<div>
+				<div style="font-size: 12pt;color: black;background-color: #f8ffda;padding: 10px;border: 1px solid #b3b300;font-weight: 600;">Question: {$row.question}</div>
+				{if empty($row.answers)}
+					<div style="font-size: 11pt;color: red; padding: 5px; margin-bottom: 5px; margin-top: 5px; text-align: center;">
+						No answers for this question!
 					</div>
-					<input type="hidden" name="questionId[]" value="{$row.question_id}">
-        			<textarea rows="4" name="answer[]">{$row.answer}</textarea>
-      			</div>
-			{/foreach}
-			<div class="modal-footer">
-    			<input type="submit" id="add-answer" class="btn btn-blue" value="Save answers in database"/>
+				{else}
+					{foreach from=$row.answers item=answer}							
+						<div style="font-size: 11pt;color: black;background-color: #ffffff;padding: 5px;margin-top: 5px; margin-bottom: 5px; border: 1px solid lightgray;">
+							<p style="text-align: right;font-size: 9pt;">Answered by <span style="color: blue;">{$answer.username}</span> @ {$answer.time}</p>
+							<p>{$answer.answer}</p>
+						</div>
+					{/foreach}	
+				{/if}
   			</div>
-  		</form>
+		{/foreach}
+
 	</div>
 </body>
 </html>
