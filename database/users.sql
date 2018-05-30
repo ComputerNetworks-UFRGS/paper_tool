@@ -76,4 +76,14 @@ INSERT INTO users (username,password,email,active) VALUES
 
 -- v10l3tt4s
 INSERT INTO users (username,password,email,active) VALUES 
-				  ('violettas', 'f66024fce42b11e81cf5605d8715107f', 'georgevio@gmail.com', 1);				
+				  ('violettas', 'f66024fce42b11e81cf5605d8715107f', 'georgevio@gmail.com', 1);
+
+-- sl4w0m1r
+INSERT INTO users (username,password,email,active) VALUES 
+				  ('slawomir', 'e53b8b8244998552e1edcd47423bedac', 'slawomir.kuklinski@gmail.com', 1);
+
+-- lu1sm1gu3l
+INSERT INTO users (username,password,email,active) VALUES 
+				  ('luismiguel', 'fab16f1a0772183f7fe97ec2bdf43d3b', 'luismiguel.contrerasmurillo@telefonica.com', 1);
+
+
