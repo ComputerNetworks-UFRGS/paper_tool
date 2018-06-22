@@ -86,4 +86,6 @@ INSERT INTO users (username,password,email,active) VALUES
 INSERT INTO users (username,password,email,active) VALUES 
 				  ('luismiguel', 'fab16f1a0772183f7fe97ec2bdf43d3b', 'luismiguel.contrerasmurillo@telefonica.com', 1);
 
-
+-- luc14n0
+INSERT INTO users (username,password,email,active) VALUES 
+				  ('luciano', 'eff43e210bcb0034144b7e877f5608fc', 'zembruzki558@gmail.com', 1);
