@@ -60,9 +60,9 @@ for($i = 0; $i < $c1 ; $i++){
 		$papers[$i]['assignedToUser'] = $conexao->GetOne($sSQL);	
 	}
 
-	if(empty($papers[$i]['pdf_link'])){
-		$papers[$i]['pdf_link'] = "../papers/".$papers[$i]['file'];
-	}
+	//if(empty($papers[$i]['pdf_link'])){
+	$papers[$i]['pdf_link'] = "../papers/".$papers[$i]['id'].".pdf";
+	//}
 
 	$papers[$i]['ratingColorCode'] = $ratingColors[$papers[$i]['rating']]['colorCode'];
 	$papers[$i]['ratingClass'] = $ratingColors[$papers[$i]['rating']]['class']; 
