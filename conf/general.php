@@ -1,7 +1,7 @@
 <?php
 
 // System DIR_NAME
-define("SYS_DIR_NAME","paper_tool_dev");
+define("SYS_DIR_NAME","netslicing");
 
 // System PATH
 $_path = strstr(getcwd(),SYS_DIR_NAME,true);
@@ -26,7 +26,7 @@ define("DATABASE_DRIVER","postgres");
 define("DATABASE_SERVER","localhost");
 define("DATABASE_USER","tool");
 define("DATABASE_PASSWORD","tool");
-define("DATABASE_NAME","paper_tool_dev");
+define("DATABASE_NAME","paper_tool");
 
 // Misc PATHs
 

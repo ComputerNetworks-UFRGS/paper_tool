@@ -1,6 +1,6 @@
-<?
+<?php
 
-session_start("vispaper");
+session_start("tool");
 
 if(!$_SESSION['userid'])
     {
