@@ -42,15 +42,51 @@
 	</style>
 </head>
 <body >
-	{if $operation == 1}
+	{if $operation == 'user_add'}
+		{if $error}
+			<h1 class="feedback" style="color:red;">{$msg}</h1>
+		{else}
+			<h1 class="feedback">{$msg}</h1>
+		{/if}
+	    <h2 class="feedback" style="padding-top: 0"><a style="color: #666666; text-decoration: underline" href="login.php">Go back</a></h2>
+	{/if}
+
+	{if $operation == 'project_add'}
+		{if $error}
+			<h1 class="feedback" style="color:red;">{$msg}</h1>
+		{else}
+			<h1 class="feedback">{$msg}</h1>
+		{/if}
+	    <h2 class="feedback" style="padding-top: 0"><a style="color: #666666; text-decoration: underline" href="main.php?reload" target="_parent">Go back</a></h2>
+	{/if}
+
+	{if $operation == 'project_edit_users'}
+		{if $error}
+			<h1 class="feedback" style="color:red;">{$msg}</h1>
+		{else}
+			<h1 class="feedback">{$msg}</h1>
+		{/if}
+		<h2 class="feedback" style="padding-top: 0"><a style="color: #666666; text-decoration: underline" href="projects-manage-users.php?project_id={$project_id}" target="_parent">Go back</a></h2>
+	{/if}
+
+	{if $operation == 'project_edit_questions'}
+		{if $error}
+			<h1 class="feedback" style="color:red;">{$msg}</h1>
+		{else}
+			<h1 class="feedback">{$msg}</h1>
+		{/if}
+		<h2 class="feedback" style="padding-top: 0"><a style="color: #666666; text-decoration: underline" href="projects-manage-questions.php?project_id={$project_id}" target="_parent">Go back</a></h2>
+	{/if}
+
+	{if $operation == 'paper_add'}
 		{if $error}
 			<h1 class="feedback" style="color:red;">{$msg}</h1>
 		{else}
 			<h1 class="feedback">{$msg}</h1>
 		{/if}
 	{/if}
-	
-	{if $operation == 2}
+
+	{if $operation == 'paper_import_csv'}
 		{if $error}
 			<h2 class="feedback" style="color:red; text-align: center;">{$msg}</h2>
 		{else}
@@ -64,12 +100,12 @@
 						<th>Title</th>
 						<th>Status</th>
 						<th>Message</th>
-						<th>Line</th>					
+						<th>Line</th>
 					</tr>
 				</thead>
 				<tbody>
 				{assign var="cont" value="1"}
-				{foreach from=$papers item=row}				
+				{foreach from=$papers item=row}
 					<tr>
 						<td>{$cont}</td>
 						<td>{$row.title}</td>
@@ -80,21 +116,21 @@
 						{/if}
 						<td>{$row.message}</td>
 						<td>{$row.line}</td>
-					</tr>	
-					{assign var=cont value=$cont+1}			
+					</tr>
+					{assign var=cont value=$cont+1}
 				{/foreach}
 				</tbody>
 		</table>
 		{/if}
 	{/if}
 
-	{if $operation == 30}
+	{if $operation == 'paper_answer'}
 		{if $error}
 			<h1 class="feedback" style="color:red;">{$msg}</h1>
 		{else}
 			<h1 class="feedback">{$msg}</h1>
 			<div style="text-align: center; font-size: 16px; margin-top: 20px;">
-				Click <a href="papers-list.php" style="color: darkred;text-decoration: underline;">here</a> to return to the papers list.
+				Click <a href="papers-list.php?project_id={$project_id}" style="color: darkred;text-decoration: underline;">here</a> to return to the papers list.
 			</div>
 		{/if}
 	{/if}

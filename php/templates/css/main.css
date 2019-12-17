@@ -46,8 +46,27 @@
 	color: #678CFF;
 }
 
+.navbar-inverse .nav > li > a.fixed {
+    color: #DEDEDE;
+}
+
 #iframe-style {
 	border: medium none;
     height: 100%;
     width: 100%;	
+}
+
+i.icon-cog {
+    position: absolute;
+    top: 10px;
+    left: 25px;
+    color: #999999 ! important;
+}
+
+a.adm-item {
+    position: relative;
+}
+
+a.adm-item i:not(.icon-cog) {
+    margin-right: 5px;
 }

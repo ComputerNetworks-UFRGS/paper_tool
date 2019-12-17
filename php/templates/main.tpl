@@ -61,6 +61,18 @@
 <div class="navbar navbar-top navbar-inverse">
 	<div class="navbar-inner-menu-sup">
 		<div class="container-fluid">
+			<ul class="nav pull-left">
+				<!-- username -->
+				<li>
+					<a class="fixed"><i class="icon-user"></i> {$username}</a>
+				</li>
+                <!-- project -->
+                {if $project_id > 0}
+				<li>
+					<a class="fixed"><i class="icon-folder-open"></i> {$projects[$project_id]}</a>
+				</li>
+                {/if}
+			</ul>
 			<ul class="nav pull-right">
 				<li class="toggle-primary-sidebar hidden-desktop" data-toggle="collapse" data-target=".nav-collapse-primary">
 					<button type="button" class="btn btn-navbar">
@@ -75,19 +87,60 @@
 			</ul>
 			<div class="nav-collapse nav-collapse-top collapse">
 				<ul class="nav pull-right">
+					<!-- admin -->
+					{if isset($g_permissions['g_user_view']) or isset($g_permissions['g_project_view'])}
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> <b>Administration</b> <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+									{if isset($g_permissions['g_user_view'])}
+									<li><a href="users-list.php" target="iframe-body" class="adm-item"><i class="icon-user"></i><i class="icon-cog"></i> Users</a></li>
+									{/if}
+									{if isset($g_permissions['g_project_view'])}
+									<li><a href="projects-list.php?admin" target="iframe-body" class="adm-item"><i class="icon-folder-close"></i><i class="icon-cog"></i> Projects</a></li>
+									{/if}
+						</ul>
+
+					</li>
+                                        {/if}
+					<!-- project -->
+					{if $project_id}
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-folder-close"></i> <b>Projects</b> <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+						    {foreach from=$projects key=p_id item=p_name}
+								{if $p_id eq $project_id}
+									<li><a href="papers-list.php?project_id={$p_id}" target="iframe-body"><i class="icon-folder-open"></i> {$p_name}</a></li>
+								{else}
+									<li><a href="main.php?project_id={$p_id}"><i class="icon-folder-close"></i> {$p_name}</a></li>
+								{/if}
+							{/foreach}
+							<li><a href="projects-list.php" target="iframe-body"><i class="icon-list"></i> View My Projects</a></li>
+						</ul>
+					</li>
+					{else}
 					<li>
-						<a href="taxonomy-add.php" target="iframe-body">
-							<i class="icon-sitemap"></i>Taxonomies
+						<a href="projects-add.php" target="iframe-body"><i class="icon-folder-close"></i> <b>Add New Project</b> <b class="caret"></b></a>
+					</li>
+					{/if}
+					<!-- taxonomies -->
+					{if $project_id}
+					<li>
+						<a href="taxonomy-add.php?project_id={$project_id}" target="iframe-body">
+							<i class="icon-sitemap"></i><b>Taxonomies</b>
 						</a>
 					</li>
+					{/if}
+					<!-- papers -->
+					{if $project_id}
 					<li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-file"></i> Papers <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-file"></i> <b>Papers</b> <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-							<li><a href="papers-list.php" target="iframe-body">List</a></li>
-                            <li><a href="papers-add.php" target="iframe-body">Add</a></li>
-                            <li><a href="papers-csv.php" target="iframe-body">Upload CSV</a></li>
+							<li><a href="papers-list.php?project_id={$project_id}" target="iframe-body">List</a></li>
+                            <li><a href="papers-add.php?project_id={$project_id}" target="iframe-body">Add</a></li>
+                            <li><a href="papers-csv.php?project_id={$project_id}" target="iframe-body">Upload CSV</a></li>
                         </ul>
                     </li>
+					{/if}
 					<!--
 					<li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Classify on taxonomies <b class="caret"></b></a>
@@ -97,7 +150,7 @@
                         </ul>
                     </li>
 					-->
-					<li><a href="logout.php" title="logout"><i class="icon-signout"></i> Logout</a></li>
+					<li><a href="logout.php" title="logout"><i class="icon-signout"></i> <b>Logout</b></a></li>
 				</ul>
 			</div>
       	</div>
@@ -109,7 +162,15 @@
 </div>
 -->
 <div id="content-iframe">
-	<iframe id="iframe-style" src="papers-list.php" name="iframe-body"></iframe>
+	{if $all_projects}
+	<iframe id="iframe-style" src="projects-list.php" name="iframe-body"></iframe>
+	{else}
+		{if $project_id}
+			<iframe id="iframe-style" src="papers-list.php?project_id={$project_id}" name="iframe-body"></iframe>
+		{else}
+			<iframe id="iframe-style" src="projects-list.php" name="iframe-body"></iframe>
+		{/if}
+	{/if}
 </div>
 
 </div>

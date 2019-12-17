@@ -19,14 +19,20 @@ $db = ADONewConnection(DATABASE_DRIVER);
 $db->Connect(DATABASE_SERVER, DATABASE_USER, DATABASE_PASSWORD, DATABASE_NAME);
 
 if(isset($_REQUEST['erro']))
-	$smarty->assign("erro","1");
+    $smarty->assign("erro","1");
 else
-	$smarty->assign("erro","0");
+    $smarty->assign("erro","0");
 
 //$rs = $db->Execute('select * from teste;');
 
 //** un-comment the following line to show the debug console
 //$smarty->debugging = true;
+
+if (isset($_REQUEST['invite_code'])) {
+    $smarty->assign('invite_code', $_REQUEST['invite_code']);
+} else {
+    $smarty->assign('invite_code', null);
+}
 
 $smarty->display('login.tpl');
 ?>

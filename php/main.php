@@ -1,8 +1,11 @@
 <?php
+require_once "session.php";//session_start();
 require_once "../conf/general.php";
 require_once INCLUDE_SMARTY;
 require_once INCLUDE_ADODB;
 require_once INCLUDE_ADODB_ERROR;
+require_once INCLUDE_RBAC;
+require_once "project_id.php";
 
 $smarty = new Smarty();
 
@@ -27,6 +30,28 @@ else
 
 //** un-comment the following line to show the debug console
 //$smarty->debugging = true;
+
+$conexao = ADONewConnection(DATABASE_DRIVER);
+$conexao->PConnect(DATABASE_SERVER,DATABASE_USER,DATABASE_PASSWORD,DATABASE_NAME);
+
+
+$smarty->assign("username",$_SESSION["username"]);
+if (isset($_SESSION["project_id"])) {
+	$smarty->assign("project_id", $_SESSION["project_id"]);
+	$smarty->assign("all_projects", false);
+} else {
+	$smarty->assign("project_id", null);
+	$smarty->assign("all_projects", true);
+}
+
+if (isset($_REQUEST['all_projects'])) {
+	$smarty->assign("all_projects", true);
+}
+
+$smarty->assign("projects",$_SESSION["projects"]);
+$smarty->assign("g_permissions", rbac_list());
+
+$conexao->close();
 
 $smarty->display('main.tpl');
 ?>

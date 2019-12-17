@@ -9,23 +9,40 @@ $conexao->Connect(DATABASE_SERVER, DATABASE_USER, DATABASE_PASSWORD, DATABASE_NA
 
 function storeFields($json,$length,$parentId,$order,$tableName,$sequenceName,$conexao){
 
+    $storedIds = array();
 	for($i = 0; $i < $length; $i++){
-		$topicName = $json[$i]['text']; 
-		$topicId = $conexao->GetOne("SELECT nextval('".$sequenceName."');");
-		$sSQL = " INSERT into ".$tableName." (id,name,order_view,parent_id) ";
-		$sSQL.= " values (".$topicId.",'".$topicName."',".$order.",".$parentId.");";
-		$conexao->Execute($sSQL);
-		if(is_array($json[$i]['children'])){
-			storeFields($json[$i]['children'],
+		$topicId = (int)$json[$i]['id'];
+		$topicName = $json[$i]['text'];
+		if ($topicId == 0) {
+            $topicId = $conexao->GetOne("SELECT nextval('" . $sequenceName . "');");
+            $sSQL = " INSERT into " . $tableName . " (id,name,order_view,parent_id) " .
+                    " values (" . $topicId . ",'" . $topicName . "'," . $order . "," . $parentId . ");";
+			$conexao->Execute($sSQL);
+			$storedIds[] = $conexao->insert_Id();
+        } else {
+            $sSQL = " UPDATE " . $tableName . " SET " .
+				    " name = '" . $topicName . "', " .
+				    " order_view = " . $order . "," .
+				    " parent_id = " . $parentId . " " .
+                    " WHERE id = " . $topicId . ";";
+			$conexao->Execute($sSQL);
+			$storedIds[] = $topicId;
+		}
+
+
+		if(isset($json[$i]['children']) && is_array($json[$i]['children'])){
+			$childIds = storeFields($json[$i]['children'],
 						count($json[$i]['children']),
 						$topicId,
 						0,
 						$tableName,
 						$sequenceName,
-						$conexao);			
+						$conexao);
+			$storedIds = array_merge($storedIds, $childIds);
 		}
 		$order++;
 	}
+	return $storedIds;
 }
 
 $operation = $_REQUEST["operation"];
@@ -38,9 +55,10 @@ if($operation == 1){
 	$params = array();
 	$params[] = $id;
 	$params[] = $_REQUEST['newTaxonomyName'];
-	$params[] = 1; // ajustar para pegar o codigo pela sessao
+	$params[] = $_SESSION['userid'];
+	$params[] = $_REQUEST['projectId'];
 
-	$sSQL = "INSERT INTO taxonomies (id,name,created_by) values (?,?,?)";
+	$sSQL = "INSERT INTO taxonomies (id,name,created_by,project_id) values (?,?,?,?)";
     if($conexao->Execute($sSQL,$params)){
     	echo $id;
     }
@@ -84,7 +102,10 @@ if($operation == 2){
 	}
 
 	$parentId = 0;
-	storeFields($treeJson,$length,$parentId,0,$tableName,$sequenceName,$conexao);
+	$ids = storeFields($treeJson,$length,$parentId,0,$tableName,$sequenceName,$conexao);
+
+	$sSQL = "DELETE from ".$tableName." where id not in (".implode(',', $ids).")";
+	$arr = $conexao->getArray($sSQL);
 	echo 1;
 }
 
@@ -96,7 +117,7 @@ if($operation == 3){
 
 
 	$sSQL = "
-		SELECT taxo.id,
+		SELECT taxo.id, taxo.name,
 		CASE WHEN taxo.parent_id = 0 
 			THEN 
 				'#' 
@@ -133,7 +154,11 @@ if($operation == 3){
 	for($i = 0; $i < $length; $i++){
 		$result[$i]['id'] = $taxoFields[$i]['id'];
 		$result[$i]['parent'] = $taxoFields[$i]['parent'];
-		$result[$i]['text'] = $taxoFields[$i]['text'];
+		if (isset($_REQUEST['edit']) && ($_REQUEST['edit'] == 1)) {
+			$result[$i]['text'] = $taxoFields[$i]['name'];
+		} else {
+			$result[$i]['text'] = $taxoFields[$i]['text'];
+		}
 	}
 
 	echo json_encode($result);

@@ -55,7 +55,15 @@
                 </div>
 							{/if}
 							<div>
-            	   <a class="btn btn-blue btn-block" id="btn" href="#">Login <i class="icon-signin"></i></a>
+                   <a class="btn btn-blue btn-block" id="btn" href="#">Login <i class="icon-signin"></i></a>
+                   {if $invite_code == null}
+                       <a class="btn btn-lightblue btn-block" id="btn-signup" href="users-add.php?signup">
+                   {else}
+                       <input type="hidden" name="invite_code" value="{$invite_code}"/>
+                       <a class="btn btn-lightblue btn-block" id="btn-signup" href="users-add.php?signup&invite_code={$invite_code}">
+                   {/if}
+                       Sign Up <i class="icon-pencil"></i>
+                   </a>
           		</div>
 						</form>
       				</div>

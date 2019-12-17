@@ -43,7 +43,8 @@
 
   	<div class="modal-body">
   	<form name="form" class="form-horizontal fill-up separate-sections" method="post" enctype="multipart/form-data" action="papers-con.php">
-  		<input type="hidden" value="2" id="operation" name="operation"/>			
+  		<input type="hidden" value="2" id="operation" name="operation"/>
+		<input type="hidden" name="project_id" value="{$project_id}">
   		<div>
   			<label>Select the template below</label>
 	       	<select class="chzn-select" name="fileTemplate">

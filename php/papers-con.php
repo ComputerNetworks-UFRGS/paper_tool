@@ -22,9 +22,12 @@ function validPaperYear($year){
 	return 1;
 }
 // Return 1 if OK - O otherwise
-function paperAlreadyExists($title,$conexao){	
+function paperAlreadyExists($project_id,$title,$conexao){
 
-	$sSQL = " select count(*) from papers where title = '".pg_escape_string($title)."' ";
+	$params = array();
+	$sSQL = " select count(*) from papers where project_id = ? and title = ?; ";
+	$params[] = $project_id;
+	$params[] = $title;
 	$count = $conexao->GetOne($sSQL);
 
 	if($count > 0){
@@ -82,24 +85,25 @@ if($operation == 1){
 	$error = 0;
 	$uploadfile = PAPERS_PATH . $file_name;
 	if (move_uploaded_file($_FILES['paper']['tmp_name'], $uploadfile)) {
-		$sSQL = "INSERT INTO papers (id,year,citations,title,venue,site,comments,file) values ";
-    	$sSQL.= "($id,".$_REQUEST['year'].",".$_REQUEST['citations'].",'".$_REQUEST['title']."','".$_REQUEST['venue']."','".$_REQUEST['site']."','".$_REQUEST['comments']."', '$file_name');";
+		$sSQL = "INSERT INTO papers (project_id,id,year,citations,title,venue,site,comments,file) values ";
+    	$sSQL.= "(".$_REQUEST['project_id'].",$id,".$_REQUEST['year'].",".$_REQUEST['citations'].",'".$_REQUEST['title']."','".$_REQUEST['venue']."','".$_REQUEST['site']."','".$_REQUEST['comments']."', '$file_name');";
     	
     	if($conexao->Execute($sSQL)){
 			$msg = "Success! Paper was recorded.";
 		}
 		else{
 			$error = 1;
-			$msg = "Oops! Paper was not recorded.";
+			$msg = "Oops! Paper was not recorded (db error).";
 		}
 	}
  	else {
  		$error = 1;
-		$msg = "Oops! Paper was not recorded.";
+		$msg = "Oops! Paper was not recorded (file upload error).";
 	}
 	$smarty->assign('error',$error);
 	$smarty->assign('msg',$msg);
-	$smarty->assign('operation',$operation);
+	$smarty->assign('operation', 'paper_add');
+	$smarty->assign('project_id',$_REQUEST['project_id']);
 	$smarty->display('feedback.tpl');
 }
 
@@ -145,13 +149,14 @@ if($operation == 2){
 					$papers[$c_papers++]['message'] = "This paper does not have year information!";
 					continue;
 				}
-				if(paperAlreadyExists($data[0],$conexao)){
+				if(paperAlreadyExists($_REQUEST['project_id'],$data[0],$conexao)){
 					$papers[$c_papers]['status'] = "ERROR";
 					$papers[$c_papers++]['message'] = "This paper already exists in the database!";
 					continue;	
 				}
 
 				$params = array();
+				$params[] = $_REQUEST['project_id'];
 				$params[] = $data[0];
 				$params[] = $data[5];
 				$params[] = (int)($data[20]);
@@ -161,7 +166,7 @@ if($operation == 2){
 				$params[] = $data[15];
 				$params[] = "http://ieeexplore.ieee.org/document/";
 
-				$sSQL = "insert into papers (title,year,citations,venue,doi,pdf_link,keywords,dl_link) values (?,?,?,?,?,?,?,?)";
+				$sSQL = "insert into papers (project_id,title,year,citations,venue,doi,pdf_link,keywords,dl_link) values (?,?,?,?,?,?,?,?,?)";
 				if(!$conexao->Execute($sSQL,$params)){
 					$papers[$c_papers]['status'] = "ERROR";
 					$papers[$c_papers++]['message'] = "Error executing the insert query!";
@@ -204,13 +209,14 @@ if($operation == 2){
 					$papers[$c_papers++]['message'] = "This paper does not have year information!";
 					continue;
 				}
-				if(paperAlreadyExists($data[6],$conexao)){
+				if(paperAlreadyExists($_REQUEST['project_id'],$data[6],$conexao)){
 					$papers[$c_papers]['status'] = "ERROR";
 					$papers[$c_papers++]['message'] = "This paper already exists in the database!";
 					continue;	
 				}
 
 				$params = array();
+                $params[] = $_REQUEST['project_id'];
 				$params[] = $data[6];
 				$params[] = $data[18];
 				$params[] = 0;
@@ -225,7 +231,7 @@ if($operation == 2){
 				$params[] = $data[10];
 				$params[] = "http://dl.acm.org/citation.cfm?id=";
 
-				$sSQL = "insert into papers (title,year,citations,venue,doi,pdf_link,keywords,dl_link) values (?,?,?,?,?,?,?,?)";
+				$sSQL = "insert into papers (project_id,title,year,citations,venue,doi,pdf_link,keywords,dl_link) values (?,?,?,?,?,?,?,?,?)";
 				if(!$conexao->Execute($sSQL,$params)){
 					$papers[$c_papers]['status'] = "ERROR";
 					$papers[$c_papers++]['message'] = "Error executing the insert query!";
@@ -271,13 +277,14 @@ if($operation == 2){
 					$papers[$c_papers++]['message'] = "This paper does not have year information!";
 					continue;
 				}
-				if(paperAlreadyExists($data[4],$conexao)){
+				if(paperAlreadyExists($_REQUEST['project_id'],$data[4],$conexao)){
 					$papers[$c_papers]['status'] = "ERROR";
 					$papers[$c_papers++]['message'] = "This paper already exists in the database!";
 					continue;	
 				}
 
 				$params = array();
+                $params[] = $_REQUEST['project_id'];
 				$params[] = $data[4];
 				$params[] = $data[10];
 				$params[] = 0;
@@ -287,7 +294,7 @@ if($operation == 2){
 				$params[] = $data[28];
 				$params[] = "";
 
-				$sSQL = "insert into papers (title,year,citations,venue,doi,pdf_link,keywords,dl_link) values (?,?,?,?,?,?,?,?)";
+				$sSQL = "insert into papers (project_id,title,year,citations,venue,doi,pdf_link,keywords,dl_link) values (?,?,?,?,?,?,?,?,?)";
 				if(!$conexao->Execute($sSQL,$params)){
 					$papers[$c_papers]['status'] = "ERROR";
 					$papers[$c_papers++]['message'] = "Error executing the insert query!";
@@ -310,7 +317,8 @@ if($operation == 2){
 	$smarty->assign('error',$error);
 	$smarty->assign('msg',$msg);
 	$smarty->assign('papers',$papers);
-	$smarty->assign('operation',$operation);
+	$smarty->assign('operation', 'paper_import_csv');
+    $smarty->assign('project_id',$_REQUEST['project_id']);
 	$smarty->display('feedback.tpl');
 	
 }
@@ -540,7 +548,8 @@ if($operation == 30){
 
 	$smarty->assign('error',$error);
 	$smarty->assign('msg',$msg);
-	$smarty->assign('operation',$operation);
+	$smarty->assign('operation','paper_answer');
+    $smarty->assign('project_id',$_REQUEST['project_id']);
 	$smarty->display('feedback.tpl');
 	
 }

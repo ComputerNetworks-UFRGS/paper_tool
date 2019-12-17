@@ -59,6 +59,7 @@
 
 <div id="yearSelect">
 	<form name="form" method="post" action="papers-list.php">
+    <input type="hidden" name="project_id" value="{$project_id}">
 	<div style="width: 50%; float: left;">
 		<label>Select year</label>
 	   	<select class="chzn-select" id="selectYear" name="year" onchange="document.form.submit();">
@@ -81,9 +82,9 @@
 
 <div class="box">
 	{if $year != 0}
-    	<div class="box-header"><h3>&nbsp;&nbsp;&nbsp;{$year} - [{$papers|@count} papers]</h3></div>
+    	<div class="box-header"><h4>&nbsp;&nbsp;&nbsp;{$year} - [{$papers|@count} papers]</h4></div>
     {else}
-    	<div class="box-header"><h3>&nbsp;&nbsp;&nbsp;ALL - [{$papers|@count} papers]</h3></div>
+    	<div class="box-header"><h4>&nbsp;&nbsp;&nbsp;ALL - [{$papers|@count} papers]</h4></div>
     {/if}
     <div class="box-content">
     	<!-- find me in partials/data_tables_custom -->
@@ -151,7 +152,7 @@
 						</a>	
 					</td>
     				<td class="center ">
-    					<form method="post" action="paper-add-answer.php">
+    					<form method="post" action="paper-add-answer.php?project_id={$project_id}">
     						<input type="hidden" name="paper_id" value="{$row.id}">   
     						{if not {$row.hasUserAnswer}} 						
 								<button style="width: 8em; background-color: lightgray;">Answer</button>
@@ -160,7 +161,7 @@
 							{/if}
 						</form>				
 						<div style="height: 0.5em"></div>
-						<form method="post" action="paper-view-answers.php">
+						<form method="post" action="paper-view-answers.php?project_id={$project_id}">
 							<input type="hidden" name="paper_id" value="{$row.id}">
 							{if not {$row.haveAnswers}}
 								<button style="width: 8em; background-color: lightgray;">View Answers</button>

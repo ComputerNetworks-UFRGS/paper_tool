@@ -46,7 +46,7 @@
 			<h4>Year: {$paper[0].year}</h4>
 		</div>
 		<div style="text-align: right;">
-			Click <a href="papers-list.php" style="color: darkred;text-decoration: underline;">here</a> to return to the papers list.
+			Click <a href="papers-list.php?project_id={$project_id}" style="color: darkred;text-decoration: underline;">here</a> to return to the papers list.
 		</div>
 		<hr>	
 		{foreach from=$questions item=row}

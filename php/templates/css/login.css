@@ -33,12 +33,29 @@ border-bottom-width: 3px;
 border-bottom-color: rgba(0, 0, 0, .3);
 }
 
+.btn.btn-lightblue{
+box-shadow: none;
+color: #FFF;
+text-shadow: 1px 1px 1px rgba(0, 0, 0, .4);
+border-bottom-style: solid;
+border-bottom-width: 3px;
+border-bottom-color: rgba(0, 0, 0, .3);
+}
+
 [class^="icon-"], [class*=" icon-"] {
 color: #678CFF;
 }
 
+.icon-pencil {
+	color: #26019B;
+}
+
 .btn.btn-blue:hover{
 	background: #17015C;
+}
+
+.btn.btn-lightblue:hover{
+	background: #296F8E;
 }
 
 .topo{

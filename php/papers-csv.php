@@ -4,8 +4,10 @@ require_once "../conf/general.php";
 require_once INCLUDE_SMARTY;
 require_once INCLUDE_ADODB;
 require_once INCLUDE_ADODB_ERROR;
+require_once "project_id.php";
 
 $smarty = new Smarty();
+$smarty->assign('project_id', $PROJECT_ID);
 
 $smarty->assign('IMAGES_PATH',IMAGES_PATH);
 $smarty->assign('JS_PATH',JS_PATH);

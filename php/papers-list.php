@@ -4,8 +4,19 @@ require_once "../conf/general.php";
 require_once INCLUDE_SMARTY;
 require_once INCLUDE_ADODB;
 require_once INCLUDE_ADODB_ERROR;
+require_once INCLUDE_RBAC;
+require_once "project_id.php";
+
+
+if (!rbac_check('project_view', $PROJECT_ID)) {
+    die("You don't have permission to view this project");
+}
+if (!rbac_check('paper_view', $PROJECT_ID)) {
+    die("You don't have permission to view papers on this project");
+}
 
 $smarty = new Smarty();
+$smarty->assign('project_id', $PROJECT_ID);
 
 $smarty->assign('IMAGES_PATH',IMAGES_PATH);
 $smarty->assign('JS_PATH',JS_PATH);
@@ -20,34 +31,55 @@ $smarty->assign('USERNAME',$_SESSION['username']);
 $conexao = ADONewConnection(DATABASE_DRIVER);
 $conexao->Connect(DATABASE_SERVER, DATABASE_USER, DATABASE_PASSWORD, DATABASE_NAME);
 
-$sSQL = " SELECT id,username from users where active = 1 and id not in (1) order by username ";
-$users = $conexao->GetAssoc($sSQL);
+$sSQL = " SELECT u.id,u.username FROM users u LEFT JOIN access_control ac ON u.id = ac.user_id WHERE u.active = 1 AND ac.project_id = ? ORDER BY username";
+$params = array($PROJECT_ID);
+
+//workaround to buggy GetAssoc() in adodb 5.21 --ggf
+$arr = $conexao->GetArray($sSQL, $params);
+$users = array();
+foreach ($arr as $item) {
+    $users[$item[0]] = $item[1];
+}
+
 $smarty->assign('users',$users);
 
-$sSQL = " SELECT year from papers where active = 1 group by year order by year desc ";
-$years = $conexao->GetCol($sSQL);
+$params = array();
+$sSQL = " SELECT year from papers where active = 1 and project_id = ? group by year order by year desc ";
+$params[] = $PROJECT_ID;
+$years = $conexao->GetCol($sSQL,$params);
 
 if(isset($_REQUEST['year'])){
 	$year = $_REQUEST['year'];
+    $_SESSION['papers-list'][$PROJECT_ID]['year'] = $_REQUEST['year'];
 }
-else{
+if(isset($_SESSION['papers-list'][$PROJECT_ID]['year'])){
+    $year = $_SESSION['papers-list'][$PROJECT_ID]['year'];
+}
+else if(isset($years[0])){
 	$year = $years[0];	
 }
+else {
+	$year = 0;
+}
 
-$param = array();
+$params = array();
 if($year == 0){
-	$sSQL = "SELECT * from papers where active = ? order by year desc, title asc;";
-	$param[] = 1;
+	$sSQL = "SELECT * from papers where active = ? and project_id = ? order by year desc, title asc;";
+	$params[] = 1;
+	$params[] = $PROJECT_ID;
 }
 else{
-	$sSQL = "SELECT * from papers where active = ? and year = ? order by year desc, title asc;";	
-	$param[] = 1;
-	$param[] = $year;
+	$sSQL = "SELECT * from papers where active = ? and year = ? and project_id = ? order by year desc, title asc;";	
+	$params[] = 1;
+	$params[] = $year;
+	$params[] = $PROJECT_ID;
 }
-$papers = $conexao->GetArray($sSQL,$param);
+$papers = $conexao->GetArray($sSQL,$params);
 
-$sSQL = "SELECT id,name from taxonomies where active=1 order by name;";
-$taxonomies = $conexao->GetArray($sSQL);
+$params = array();
+$sSQL = "SELECT id,name from taxonomies where active=1 and project_id = ? order by name;";
+$params[] = $PROJECT_ID;
+$taxonomies = $conexao->GetArray($sSQL, $params);
 
 $c1 = count($papers);
 $c2 = count($taxonomies);
@@ -97,15 +129,19 @@ for($i = 0; $i < $c1 ; $i++){
 
 $smarty->assign('papers',$papers);
 
-$sSQL = " SELECT count(*) from papers where active = 1 ";
-$smarty->assign('total_papers',$conexao->GetOne($sSQL));
+$params = array();
+$sSQL = " SELECT count(*) from papers where active = 1 and project_id = ? ";
+$params[] = $PROJECT_ID;
+$smarty->assign('total_papers',$conexao->GetOne($sSQL,$params));
 
 $smarty->assign('year',$year);
 $smarty->assign('years',$years);
 
+$params = array();
 $sSQL = " SELECT year||' - '||count(year)||' paper(s)' as year ";
-$sSQL.= " from papers where active = 1 group by year order by year desc; ";
-$smarty->assign('years_output',$conexao->GetCol($sSQL));
+$sSQL.= " from papers where active = 1 and project_id = ? group by year order by year desc; ";
+$params[] = $PROJECT_ID;
+$smarty->assign('years_output',$conexao->GetCol($sSQL,$params));
 
 $smarty->assign('ratingValues', $ratingValues);
 

@@ -46,12 +46,13 @@
 			<h4>Year: {$paper[0].year}</h4>
 		</div>
 		<div style="text-align: right;">
-			Click <a href="papers-list.php" style="color: darkred;text-decoration: underline;">here</a> to return to the papers list.
+			Click <a href="papers-list.php?project_id={$project_id}" style="color: darkred;text-decoration: underline;">here</a> to return to the papers list.
 		</div>
 		<hr>
     	<form name="form" class="form-horizontal fill-up separate-sections" method="post" action="papers-con.php">
 			<input type="hidden" value="30" name="operation"/>
 			<input type="hidden" value="{$paper[0].id}" name="paperId"/>
+			<input type="hidden" name="project_id" value="{$project_id}">
 			{foreach from=$questions item=row}
 				<div>
 					<div style="font-size: 12pt;color: black;background-color: #f8ffda;padding: 10px;border: 1px solid #b3b300;font-weight: 600;">
@@ -62,7 +63,11 @@
       			</div>
 			{/foreach}
 			<div class="modal-footer">
-    			<input type="submit" id="add-answer" class="btn btn-blue" value="Save answers in database"/>
+				{if $questions|@count > 0}
+    				<input type="submit" id="add-answer" class="btn btn-blue" value="Save answers in database"/>
+				{else}
+					There are no questions assigned to this project.
+				{/if}
   			</div>
   		</form>
 	</div>

@@ -1,6 +1,6 @@
 <?php
 
-session_start('tool');
+session_start();
 
 require_once "../conf/general.php";
 

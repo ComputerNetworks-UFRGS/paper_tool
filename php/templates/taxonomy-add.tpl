@@ -50,6 +50,7 @@
 </div>
 <form name="taxonomiesForm" method="post" id="taxonomiesForm">
 <input type="hidden" value="" name="taxonomyId" id="taxonomyId">
+<input type="hidden" value="{$project_id}" name="projectId" id="projectId">
 
 <div style="width: 95%; margin: auto; margin-bottom: 1em;">
 	<div id="addTaxonomyBox" style="float: left; width: 50%">
@@ -58,7 +59,7 @@
 		<br>
 		<button type="button" id="addTaxonomyBtn" class="btn btn-default">Add Taxonomy</button>	
 	</div>
-	<!-- <div id="editTaxonomyBox" style="float: left; width: 50%">
+	<div id="editTaxonomyBox" style="float: left; width: 50%">
 		<label>Edit existing one</label>
 	    <select class="form-control" id="editTaxonomyId">
 	    	<option value="-1">Select here ...</option>
@@ -66,7 +67,7 @@
 	    </select>
 	    <br>
 		<button type="button" id="editTaxonomyBtn" class="btn btn-default">Edit Taxonomy</button>	
-	</div> --> 
+	</div>
 	<div id="viewTaxonomyBox" style="float: left; width: 50%">
 		<label>View existing one</label>
 	    <select class="form-control" id="viewTaxonomyId">
@@ -84,8 +85,8 @@
 	<div class="row">
 		<button type="button" class="btn btn-success" onclick="createRootNode('jstreeTaxonomyAddEdit');">Create Root Node</button>
 		<button type="button" id="saveTaxonomyBtn" class="btn btn-default">Save taxonomy fieds</button>
-		<!-- <button type="button" class="btn btn-warning" onclick="demo_rename();">Rename Field</button>
-		<button type="button" class="btn btn-danger" onclick="demo_delete();">Delete Field</button> -->
+		<button type="button" class="btn btn-warning" onclick="demo_rename();">Rename Field</button>
+		<button type="button" class="btn btn-danger" onclick="demo_delete();">Delete Field</button>
 		<h5>Use the right click on a topic to display the menu options</h5>
 	</div>
 	<div class="row">

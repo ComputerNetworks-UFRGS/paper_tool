@@ -4,8 +4,11 @@ require_once "../conf/general.php";
 require_once INCLUDE_SMARTY;
 require_once INCLUDE_ADODB;
 require_once INCLUDE_ADODB_ERROR;
+require_once INCLUDE_RBAC;
+require_once "project_id.php";
 
 $smarty = new Smarty();
+$smarty->assign('project_id', $PROJECT_ID);
 
 $smarty->assign('IMAGES_PATH',IMAGES_PATH);
 $smarty->assign('JS_PATH',JS_PATH);
@@ -20,6 +23,9 @@ $smarty->assign('USERNAME',$_SESSION['username']);
 if(!isset($_REQUEST['paper_id'])){
 	die('ERROR! No paper id!');
 }
+if (!rbac_check('project_view', $PROJECT_ID)) {
+	die("You don't have permission to view this project");
+}
 
 $paper_id = $_REQUEST['paper_id'];
 $user_id = $_SESSION['userid'];
@@ -31,15 +37,17 @@ $sSQL = "select * from papers where id = ? ";
 $paper = $conexao->GetArray($sSQL,array($paper_id));
 $smarty->assign('paper',$paper);
 
-$sSQL = " select * from questions where active = 1 order by id ";
-$questions = $conexao->GetArray($sSQL);
+$params = array();
+$sSQL = " select * from questions where active = 1 and project_id = ? order by id ";
+$params[] = $PROJECT_ID;
+$questions = $conexao->GetArray($sSQL, $params);
 
 $c = count($questions);
 for($i = 0; $i < $c; $i++){
 
 	$sSQL = " select pua.id,pua.answer,pua.time,u.username from papers_users_answers as pua,users as u ";
-	$sSQL.= " where question_id = ? and pua.user_id = u.id and pua.paper_id = ? order by pua.time desc ";
-	$answers = $conexao->GetArray($sSQL,array($questions[$i]['id'],$paper_id));	
+	$sSQL.= " where pua.question_id = ? and pua.user_id = u.id and pua.paper_id = ? order by pua.time desc ";
+	$answers = $conexao->GetArray($sSQL,array($questions[$i]['id'],$paper_id));
 
 	$questions[$i]['answers'] = $answers;
 }
